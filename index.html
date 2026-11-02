@@ -589,11 +589,50 @@
       "Taxi Driver: Vidas nocturnas": "Taxi Driver"
     };
 
+    const OFFICIAL_POSTERS = {
+      "m_inception": "https://image.tmdb.org/t/p/w500/edv5CZvWj09upOsy2Y6IwDhK8bt.jpg",
+      "m_oppenheimer": "https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",
+      "m_interstellar": "https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg",
+      "m_dark_knight": "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
+      "m_dunkirk": "https://image.tmdb.org/t/p/w500/b4FsJLvceSqhviQI0NgkGz1HqcJ.jpg",
+      "m_dune_1": "https://image.tmdb.org/t/p/w500/d5NXSklXo0qyIYkgV94XAgMIckC.jpg",
+      "m_dune_2": "https://image.tmdb.org/t/p/w500/1pdfLvkbY9ohJlCjQH2CZjjYVvJ.jpg",
+      "m_blade_runner_2049": "https://image.tmdb.org/t/p/w500/gajva2L0rPYkEWjzgFlBXCAVBE5.jpg",
+      "m_sicario": "https://image.tmdb.org/t/p/w500/7aQ5kR2l6B9VbS4a1nQ5Q0p4q2s.jpg",
+      "m_arrival": "https://image.tmdb.org/t/p/w500/x2FJsf1ElAgr63Y3PNPtJrcmpoe.jpg",
+      "m_pulp_fiction": "https://image.tmdb.org/t/p/w500/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg",
+      "m_kill_bill": "https://image.tmdb.org/t/p/w500/v7TaX8kXMXs5yFFGR41guUDNcnB.jpg",
+      "m_django": "https://image.tmdb.org/t/p/w500/7oWY8vdWW7thTzWh3OKYRkWUlD5.jpg",
+      "m_shutter_island": "https://image.tmdb.org/t/p/w500/4GDy0PHYX3VRXUtwK5ysagvk29z.jpg",
+      "m_fight_club": "https://image.tmdb.org/t/p/w500/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg",
+      "m_social_network": "https://image.tmdb.org/t/p/w500/n0ybibhJtQ5icDqTpTzbRytNDjg.jpg",
+      "m_se7en": "https://image.tmdb.org/t/p/w500/6yoghtyTpznpBik8EngEmJskVUO.jpg",
+      "m_once_upon_time": "https://image.tmdb.org/t/p/w500/8j58iQRW24xAc0VGlBWW9oOSu2.jpg",
+      "m_goodfellas": "https://image.tmdb.org/t/p/w500/aKuFiU82s5ISJpGZp7YkIr3kCUd.jpg",
+      "m_taxi_driver": "https://image.tmdb.org/t/p/w500/ekstpH694DaJUV7MvSJqQDq0qiQ.jpg",
+      "m_reservoir_dogs": "https://image.tmdb.org/t/p/w500/xi8Iu6qyTfyZVDGxgQ7QmbumJ2x.jpg",
+      "m_zodiac": "https://image.tmdb.org/t/p/w500/6Y0hP5m1i8k9P50oGz1q1858485.jpg",
+      "m_no_country": "https://image.tmdb.org/t/p/w500/6d5XOczc226jECq0LIX0siK3zgf.jpg",
+      "Batman Begins": "https://image.tmdb.org/t/p/w500/4MpN4CIIikM8ezjbjTqkxVJt5mX.jpg",
+      "The Dark Knight": "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
+      "Oppenheimer": "https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",
+      "Goodfellas": "https://image.tmdb.org/t/p/w500/aKuFiU82s5ISJpGZp7YkIr3kCUd.jpg",
+      "Taxi Driver": "https://image.tmdb.org/t/p/w500/ekstpH694DaJUV7MvSJqQDq0qiQ.jpg",
+      "Zodiac": "https://image.tmdb.org/t/p/w500/6Y0hP5m1i8k9P50oGz1q1858485.jpg"
+    };
+
     function applyTitleFixes() {
       if (!state.movies) return;
       state.movies.forEach(m => {
         if (COMMON_SPANISH_TITLES[m.title]) {
           m.title = COMMON_SPANISH_TITLES[m.title];
+        }
+        if (OFFICIAL_POSTERS[m.id]) {
+          m.poster = OFFICIAL_POSTERS[m.id];
+        } else if (OFFICIAL_POSTERS[m.title]) {
+          m.poster = OFFICIAL_POSTERS[m.title];
+        } else if (m.poster && m.poster.includes("unsplash.com") && OFFICIAL_POSTERS[m.title]) {
+          m.poster = OFFICIAL_POSTERS[m.title];
         }
       });
     }
@@ -696,6 +735,15 @@
 
       svg.call(zoomBehavior);
 
+      // Defs for circular poster clipPath
+      const defs = svg.append("defs");
+      defs.append("clipPath")
+        .attr("id", "nodePosterClip")
+        .append("circle")
+        .attr("cx", 0)
+        .attr("cy", 0)
+        .attr("r", 26);
+
       // Root layer for panning/zooming
       gContainer = svg.append("g").attr("class", "graph-root");
       linkGroup = gContainer.append("g").attr("class", "links-layer");
@@ -706,7 +754,7 @@
         .force("link", d3.forceLink().id(d => d.id).distance(d => Math.max(90, 220 - d.strength * 25)))
         .force("charge", d3.forceManyBody().strength(-380).distanceMax(650))
         .force("center", d3.forceCenter(width / 2, height / 2).strength(0.05))
-        .force("collision", d3.forceCollide().radius(45).strength(0.8));
+        .force("collision", d3.forceCollide().radius(52).strength(0.8));
 
       updateGraph();
     }
@@ -781,62 +829,69 @@
                 selectNode(d);
               });
 
-            // Outer pulse circle
+            // Dark background circle behind poster
             g.append("circle")
-              .attr("class", "node-ring")
+              .attr("class", "node-bg")
               .attr("r", 26)
+              .attr("fill", "#090d16");
+
+            // Movie Poster image clipped to circle
+            g.append("image")
+              .attr("class", "node-poster pointer-events-none")
+              .attr("href", d => d.poster || "https://image.tmdb.org/t/p/w500/aKuFiU82s5ISJpGZp7YkIr3kCUd.jpg")
+              .attr("x", -26)
+              .attr("y", -39)
+              .attr("width", 52)
+              .attr("height", 78)
+              .attr("preserveAspectRatio", "xMidYMid slice")
+              .attr("clip-path", "url(#nodePosterClip)");
+
+            // Outer cyan glowing ring
+            g.append("circle")
+              .attr("class", "node-ring pointer-events-none")
+              .attr("r", 32)
               .attr("fill", "transparent")
               .attr("stroke", d => d.color || "#38bdf8")
               .attr("stroke-width", 1.5)
-              .attr("stroke-opacity", 0.3);
+              .attr("stroke-opacity", 0.4);
 
-            // Core circle
+            // Core circular cyan border around poster
             g.append("circle")
-              .attr("class", "node-circle")
-              .attr("r", 20)
-              .attr("fill", "#0f172a")
+              .attr("class", "node-circle pointer-events-none")
+              .attr("r", 26)
+              .attr("fill", "transparent")
               .attr("stroke", d => d.color || "#38bdf8")
               .attr("stroke-width", 2.5);
 
             // Watched icon / mark
             g.append("circle")
               .attr("class", "node-watched-badge")
-              .attr("cx", 14)
-              .attr("cy", -14)
+              .attr("cx", 18)
+              .attr("cy", -18)
               .attr("r", 6.5)
               .attr("fill", "#10b981")
-              .attr("stroke", "#0f172a")
-              .attr("stroke-width", 1.5)
+              .attr("stroke", "#020617")
+              .attr("stroke-width", 2)
               .attr("display", d => activeWatched.includes(d.id) ? "block" : "none");
-
-            // Movie Initial / Icon
-            g.append("text")
-              .attr("class", "node-initial pointer-events-none")
-              .attr("text-anchor", "middle")
-              .attr("dominant-baseline", "central")
-              .attr("fill", "#e2e8f0")
-              .attr("font-size", "11px")
-              .attr("font-weight", "bold")
-              .text(d => d.title.charAt(0));
 
             // Movie Title Label below
             g.append("text")
               .attr("class", "node-label pointer-events-none")
-              .attr("y", 34)
+              .attr("y", 42)
               .attr("text-anchor", "middle")
               .attr("fill", "#f8fafc")
               .attr("font-size", "11px")
-              .attr("font-weight", "500")
+              .attr("font-weight", "600")
               .attr("paint-order", "stroke")
               .attr("stroke", "#020617")
               .attr("stroke-width", 3.5)
               .attr("stroke-linejoin", "round")
-              .text(d => d.title.length > 18 ? d.title.substring(0, 16) + "…" : d.title);
+              .text(d => d.title.length > 20 ? d.title.substring(0, 18) + "…" : d.title);
 
             // Release year subtitle
             g.append("text")
               .attr("class", "node-year pointer-events-none")
-              .attr("y", 46)
+              .attr("y", 54)
               .attr("text-anchor", "middle")
               .attr("fill", "#94a3b8")
               .attr("font-size", "9px")
@@ -846,10 +901,12 @@
             return g;
           },
           update => {
+            update.select(".node-poster")
+              .attr("href", d => d.poster || "https://image.tmdb.org/t/p/w500/aKuFiU82s5ISJpGZp7YkIr3kCUd.jpg");
             update.select(".node-watched-badge")
               .attr("display", d => activeWatched.includes(d.id) ? "block" : "none");
             update.select(".node-label")
-              .text(d => d.title.length > 18 ? d.title.substring(0, 16) + "…" : d.title);
+              .text(d => d.title.length > 20 ? d.title.substring(0, 18) + "…" : d.title);
             update.select(".node-year")
               .text(d => d.year || "");
             return update;
