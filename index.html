@@ -170,6 +170,22 @@
     <!-- SVG GRAPH CONTAINER -->
     <svg id="graphSvg" class="w-full h-full cursor-grab active:cursor-grabbing"></svg>
 
+    <!-- EMPTY GRAPH BANNER -->
+    <div id="emptyGraphBanner" class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center pointer-events-none hidden z-10">
+      <div class="bg-slate-900/90 backdrop-blur-md border border-slate-700/80 rounded-2xl p-6 max-w-sm shadow-2xl space-y-3 pointer-events-auto">
+        <div class="w-12 h-12 mx-auto rounded-full bg-cyan-950/80 border border-cyan-800 text-cyan-400 flex items-center justify-center">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
+          </svg>
+        </div>
+        <h3 class="text-sm font-bold text-white">Tu grafo está vacío</h3>
+        <p class="text-xs text-slate-300">Empieza a agregar las películas que viste para descubrir sus conexiones cinematográficas.</p>
+        <button id="emptyAddMovieBtn" class="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-xs font-semibold px-4 py-2 rounded-xl shadow-lg transition">
+          + Agregar tu primera película
+        </button>
+      </div>
+    </div>
+
     <!-- RIGHT SIDEBAR / DETAILS DRAWER -->
     <aside id="detailsPanel" class="absolute top-0 right-0 bottom-0 w-80 sm:w-96 bg-slate-900/95 backdrop-blur-md border-l border-slate-800 p-5 z-20 flex flex-col shadow-2xl transition-transform duration-300 translate-x-full overflow-y-auto">
       <!-- Close drawer button -->
@@ -248,9 +264,12 @@
           </div>
         </div>
 
-        <!-- Reset Catalog -->
-        <div class="pt-2 border-t border-slate-800">
-          <button id="resetSampleDataBtn" class="w-full bg-red-950/40 hover:bg-red-900/50 text-red-400 text-xs py-2 rounded-lg font-medium border border-red-800/50 transition">
+        <!-- Reset / Clear Catalog -->
+        <div class="pt-2 border-t border-slate-800 space-y-2">
+          <button id="clearAllMoviesBtn" class="w-full bg-red-950/40 hover:bg-red-900/50 text-red-400 text-xs py-2 rounded-lg font-medium border border-red-800/50 transition">
+            Eliminar todas las películas (vaciar grafo)
+          </button>
+          <button id="resetSampleDataBtn" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs py-2 rounded-lg font-medium border border-slate-700 transition">
             Restablecer a catálogo cinéfilo de prueba
           </button>
         </div>
@@ -666,6 +685,15 @@
       const visibleMovies = getVisibleMovies();
       const links = calculateLinks(visibleMovies);
 
+      const emptyBanner = document.getElementById("emptyGraphBanner");
+      if (emptyBanner) {
+        if (visibleMovies.length === 0) {
+          emptyBanner.classList.remove("hidden");
+        } else {
+          emptyBanner.classList.add("hidden");
+        }
+      }
+
       // Update badges and labels
       document.getElementById("connectionCount").textContent = `${links.length} enlaces`;
       document.getElementById("statLinksCount").textContent = links.length;
@@ -1003,6 +1031,16 @@
               </div>
             </div>
           </div>
+
+          <!-- Delete Movie Action -->
+          <div class="pt-3 border-t border-slate-800">
+            <button id="deleteMovieBtn" class="w-full py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 bg-red-950/40 text-red-400 border border-red-900/50 hover:bg-red-900/50 hover:text-red-300 transition-all">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+              <span>Eliminar película del grafo</span>
+            </button>
+          </div>
         </div>
       `;
 
@@ -1012,6 +1050,11 @@
       document.getElementById("toggleWatchedBtn").addEventListener("click", () => {
         toggleWatchedMovie(movie.id);
         renderMovieDetails(movie);
+      });
+
+      // Bind delete movie action
+      document.getElementById("deleteMovieBtn").addEventListener("click", () => {
+        deleteMovie(movie.id);
       });
     }
 
@@ -1113,6 +1156,21 @@
       } else {
         activeWatched.push(movieId);
       }
+      saveState();
+      updateGraph();
+    }
+
+    function deleteMovie(movieId) {
+      const idx = state.movies.findIndex(m => m.id === movieId);
+      if (idx === -1) return;
+      state.movies.splice(idx, 1);
+      Object.keys(state.profiles).forEach(pKey => {
+        const p = state.profiles[pKey];
+        if (p && p.watched) {
+          p.watched = p.watched.filter(id => id !== movieId);
+        }
+      });
+      clearSelection();
       saveState();
       updateGraph();
     }
@@ -1561,6 +1619,27 @@
           }
         };
         reader.readAsText(file);
+      });
+
+      // Empty Banner Add Button
+      const emptyAddBtn = document.getElementById("emptyAddMovieBtn");
+      if (emptyAddBtn) {
+        emptyAddBtn.addEventListener("click", () => {
+          document.getElementById("addMovieModal").classList.remove("hidden");
+          renderSuggestedResults();
+        });
+      }
+
+      // Clear All Movies
+      document.getElementById("clearAllMoviesBtn").addEventListener("click", () => {
+        state.movies = [];
+        Object.keys(state.profiles).forEach(pKey => {
+          if (state.profiles[pKey]) state.profiles[pKey].watched = [];
+        });
+        clearSelection();
+        saveState();
+        updateGraph();
+        settingsModal.classList.add("hidden");
       });
 
       // Reset Sample Data
