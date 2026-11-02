@@ -264,8 +264,11 @@
           </div>
         </div>
 
-        <!-- Reset / Clear Catalog -->
+        <!-- Title Standardization & Reset -->
         <div class="pt-2 border-t border-slate-800 space-y-2">
+          <button id="syncTitlesBtn" class="w-full bg-cyan-950/40 hover:bg-cyan-900/50 text-cyan-400 text-xs py-2 rounded-lg font-medium border border-cyan-800/60 transition">
+            Actualizar títulos existentes a inglés
+          </button>
           <button id="clearAllMoviesBtn" class="w-full bg-red-950/40 hover:bg-red-900/50 text-red-400 text-xs py-2 rounded-lg font-medium border border-red-800/50 transition">
             Eliminar todas las películas (vaciar grafo)
           </button>
@@ -558,6 +561,41 @@
         console.warn("Saving state failed:", e);
       }
       updateStats();
+    }
+
+    // Dictionary to automatically standardize common localized titles to English
+    const COMMON_SPANISH_TITLES = {
+      "Uno de los nuestros": "Goodfellas",
+      "Pulp Fiction: Tiempos violentos": "Pulp Fiction",
+      "Tiempos violentos": "Pulp Fiction",
+      "El club de la pelea": "Fight Club",
+      "El club de la lucha": "Fight Club",
+      "El caballero de la noche": "The Dark Knight",
+      "El caballero oscuro": "The Dark Knight",
+      "El origen": "Inception",
+      "Interestelar": "Interstellar",
+      "Parásitos": "Parasite",
+      "El padrino": "The Godfather",
+      "El padrino parte II": "The Godfather Part II",
+      "El laberinto del fauno": "Pan's Labyrinth",
+      "La vida es bella": "Life Is Beautiful",
+      "Perdida": "Gone Girl",
+      "Red social": "The Social Network",
+      "La red social": "The Social Network",
+      "Érase una vez en Hollywood": "Once Upon a Time in Hollywood",
+      "Había una vez en Hollywood": "Once Upon a Time in Hollywood",
+      "Sin lugar para los débiles": "No Country for Old Men",
+      "Perros de la calle": "Reservoir Dogs",
+      "Taxi Driver: Vidas nocturnas": "Taxi Driver"
+    };
+
+    function applyTitleFixes() {
+      if (!state.movies) return;
+      state.movies.forEach(m => {
+        if (COMMON_SPANISH_TITLES[m.title]) {
+          m.title = COMMON_SPANISH_TITLES[m.title];
+        }
+      });
     }
 
     // --- 3. GRAPH EDGES & SIMULATION ENGINE ---
@@ -1266,7 +1304,7 @@
       if (state.tmdbApiKey && state.tmdbApiKey.trim().length > 5) {
         statusEl.textContent = `Consultando API de TMDb en vivo para "${query}"...`;
         try {
-          const searchRes = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${state.tmdbApiKey}&query=${encodeURIComponent(query)}&language=es-ES`);
+          const searchRes = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${state.tmdbApiKey}&query=${encodeURIComponent(query)}&include_adult=false&language=en-US`);
           if (!searchRes.ok) throw new Error("Error en TMDb");
           const searchData = await searchRes.json();
 
@@ -1288,7 +1326,7 @@
               <div class="flex items-center gap-3 overflow-hidden">
                 <img src="${posterUrl}" class="w-10 h-14 object-cover rounded-md bg-slate-800 shrink-0" alt="">
                 <div class="min-w-0">
-                  <h4 class="text-xs font-bold text-white truncate">${res.title}</h4>
+                  <h4 class="text-xs font-bold text-white truncate">${res.title || res.original_title}</h4>
                   <p class="text-[11px] text-slate-400">${year} • TMDb ID: ${res.id}</p>
                 </div>
               </div>
@@ -1333,11 +1371,20 @@
 
     async function fetchAndAddTmdbMovie(tmdbId, baseMovie) {
       const statusEl = document.getElementById("searchStatusText");
-      statusEl.textContent = `Cargando créditos y equipo técnico de ${baseMovie.title}...`;
+      const initialTitle = baseMovie.title || baseMovie.original_title || "película";
+      statusEl.textContent = `Cargando información y créditos de ${initialTitle}...`;
 
       try {
-        const creditsRes = await fetch(`https://api.themoviedb.org/3/movie/${tmdbId}/credits?api_key=${state.tmdbApiKey}&language=es-ES`);
-        const credits = await creditsRes.json();
+        // Fetch English details (for English title), Spanish details (for Spanish synopsis), and credits
+        const [enRes, esRes, creditsRes] = await Promise.all([
+          fetch(`https://api.themoviedb.org/3/movie/${tmdbId}?api_key=${state.tmdbApiKey}&language=en-US`),
+          fetch(`https://api.themoviedb.org/3/movie/${tmdbId}?api_key=${state.tmdbApiKey}&language=es-ES`),
+          fetch(`https://api.themoviedb.org/3/movie/${tmdbId}/credits?api_key=${state.tmdbApiKey}&language=es-ES`)
+        ]);
+
+        const enData = enRes.ok ? await enRes.json() : null;
+        const esData = esRes.ok ? await esRes.json() : null;
+        const credits = creditsRes.ok ? await creditsRes.json() : { crew: [], cast: [] };
 
         // Extract Director
         const directorObj = credits.crew ? credits.crew.find(c => c.job === "Director") : null;
@@ -1353,17 +1400,30 @@
         // Extract top cast
         const cast = credits.cast ? credits.cast.slice(0, 8).map(c => c.name) : [];
 
+        // Title strictly in English: prioritize English release title from enData, fallback to original_title or baseMovie
+        const englishTitle = (enData && enData.title) ? enData.title : (baseMovie.original_title || baseMovie.title);
+
+        // Synopsis in Spanish if available, otherwise English
+        const spanishOverview = (esData && esData.overview && esData.overview.trim().length > 0)
+          ? esData.overview
+          : ((enData && enData.overview) ? enData.overview : "Sin descripción disponible.");
+
+        const posterPath = (enData && enData.poster_path) || (esData && esData.poster_path) || baseMovie.poster_path;
+        const releaseYear = (enData && enData.release_date) 
+          ? parseInt(enData.release_date.split("-")[0]) 
+          : (baseMovie.release_date ? parseInt(baseMovie.release_date.split("-")[0]) : 2020);
+
         const newMovie = {
           id: "m_tmdb_" + tmdbId,
           tmdbId: tmdbId,
-          title: baseMovie.title,
-          year: baseMovie.release_date ? parseInt(baseMovie.release_date.split("-")[0]) : 2020,
+          title: englishTitle,
+          year: releaseYear,
           director: director,
           dop: dop,
           writers: writers.length ? writers : [director],
           cast: cast,
-          poster: baseMovie.poster_path ? `https://image.tmdb.org/t/p/w500${baseMovie.poster_path}` : 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=500&auto=format&fit=crop&q=60',
-          overview: baseMovie.overview || "Sin descripción disponible.",
+          poster: posterPath ? `https://image.tmdb.org/t/p/w500${posterPath}` : 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=500&auto=format&fit=crop&q=60',
+          overview: spanishOverview,
           color: "#38bdf8"
         };
 
@@ -1420,6 +1480,7 @@
 
     // --- 6. EVENT LISTENERS & UI SETUP ---
     document.addEventListener("DOMContentLoaded", () => {
+      applyTitleFixes();
       initGraph();
       updateStats();
 
@@ -1642,9 +1703,39 @@
         settingsModal.classList.add("hidden");
       });
 
+      // Sync titles to English action
+      document.getElementById("syncTitlesBtn").addEventListener("click", async () => {
+        const btn = document.getElementById("syncTitlesBtn");
+        btn.textContent = "Actualizando títulos...";
+        applyTitleFixes();
+
+        if (state.tmdbApiKey && state.tmdbApiKey.trim().length > 5) {
+          for (const m of state.movies) {
+            if (m.tmdbId) {
+              try {
+                const res = await fetch(`https://api.themoviedb.org/3/movie/${m.tmdbId}?api_key=${state.tmdbApiKey}&language=en-US`);
+                if (res.ok) {
+                  const data = await res.json();
+                  if (data.title) m.title = data.title;
+                }
+              } catch(e) {
+                console.warn("Error updating title:", e);
+              }
+            }
+          }
+        }
+        saveState();
+        updateGraph();
+        btn.textContent = "✓ Títulos actualizados a inglés";
+        setTimeout(() => {
+          btn.textContent = "Actualizar títulos existentes a inglés";
+        }, 2000);
+      });
+
       // Reset Sample Data
       document.getElementById("resetSampleDataBtn").addEventListener("click", () => {
         state.movies = JSON.parse(JSON.stringify(SAMPLE_MOVIES));
+        applyTitleFixes();
         saveState();
         updateGraph();
         settingsModal.classList.add("hidden");
