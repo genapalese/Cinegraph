@@ -53,7 +53,23 @@
         <h1 class="text-sm font-bold tracking-tight text-white flex items-center gap-2">
           CineGraph <span class="text-[10px] uppercase font-semibold px-1.5 py-0.5 rounded bg-cyan-950 text-cyan-400 border border-cyan-800">Red Infinita</span>
         </h1>
-        <p class="text-[11px] text-slate-400 hidden sm:block">Grafo interactivo de películas conectadas por equipo y elenco</p>
+        <p class="text-[11px] text-slate-400 hidden lg:block">Grafo interactivo de películas y estadísticas personales</p>
+      </div>
+
+      <!-- Main Section Tabs (Grafo vs Estadísticas/Rankings) -->
+      <div class="flex items-center bg-slate-800/90 rounded-xl p-0.5 border border-slate-700/70 text-xs ml-2 sm:ml-4">
+        <button id="viewGraphTabBtn" class="px-3 py-1.5 rounded-lg text-white font-semibold bg-cyan-600 shadow-sm flex items-center gap-1.5 transition-all">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+          </svg>
+          <span>Grafo</span>
+        </button>
+        <button id="viewStatsTabBtn" class="px-3 py-1.5 rounded-lg text-slate-300 hover:text-white font-medium flex items-center gap-1.5 transition-all">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+          <span>Top & Rankings</span>
+        </button>
       </div>
     </div>
 
@@ -139,6 +155,14 @@
             <input type="checkbox" id="filterWriter" checked class="rounded bg-slate-800 border-slate-600 text-emerald-500 focus:ring-0">
             <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Guion
           </label>
+          <label class="flex items-center gap-1.5 text-slate-300 hover:text-white cursor-pointer">
+            <input type="checkbox" id="filterComposer" checked class="rounded bg-slate-800 border-slate-600 text-rose-500 focus:ring-0">
+            <span class="w-2 h-2 rounded-full bg-rose-400"></span> Compositor
+          </label>
+          <label class="flex items-center gap-1.5 text-slate-300 hover:text-white cursor-pointer">
+            <input type="checkbox" id="filterYear" checked class="rounded bg-slate-800 border-slate-600 text-indigo-500 focus:ring-0">
+            <span class="w-2 h-2 rounded-full bg-indigo-400"></span> Año
+          </label>
         </div>
       </div>
     </div>
@@ -185,6 +209,114 @@
         </button>
       </div>
     </div>
+
+    <!-- STATS & RANKINGS FULL VIEW (Separate from Graph) -->
+    <section id="statsViewSection" class="absolute inset-0 z-30 bg-slate-950 overflow-y-auto hidden select-text">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+        
+        <!-- Top Summary Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl">
+          <div>
+            <span class="text-[10px] font-bold uppercase tracking-wider text-cyan-400 bg-cyan-950/80 px-2.5 py-0.5 rounded border border-cyan-800">Estadísticas Personales</span>
+            <h2 class="text-xl font-bold text-white mt-1 flex items-center gap-2">
+              Rankings y Recuento de <span id="statsProfileName" class="text-cyan-400">Mi Chart Personal</span>
+            </h2>
+            <p class="text-xs text-slate-400 mt-0.5">Calculado sobre las películas marcadas como vistas y tus puntajes personales (1 a 100)</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-center">
+              <div class="text-[10px] uppercase font-bold text-slate-400">Películas Vistas</div>
+              <div id="statsSummaryWatched" class="text-lg font-bold text-emerald-400">0</div>
+            </div>
+            <div class="bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-center">
+              <div class="text-[10px] uppercase font-bold text-slate-400">Con Puntaje</div>
+              <div id="statsSummaryRated" class="text-lg font-bold text-amber-400">0</div>
+            </div>
+            <div class="bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-center">
+              <div class="text-[10px] uppercase font-bold text-slate-400">Promedio Gral.</div>
+              <div id="statsSummaryAvg" class="text-lg font-bold text-cyan-400">-</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Category Selector Pills -->
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div class="flex flex-wrap items-center gap-1.5 bg-slate-900/90 p-1.5 rounded-xl border border-slate-800" id="statsCategoryTabs">
+            <button data-cat="director" class="stats-cat-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-cyan-600 text-white transition flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-cyan-300"></span> Directores
+            </button>
+            <button data-cat="cast" class="stats-cat-btn px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-amber-400"></span> Actores / Elenco
+            </button>
+            <button data-cat="writer" class="stats-cat-btn px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Guionistas
+            </button>
+            <button data-cat="dop" class="stats-cat-btn px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-fuchsia-400"></span> Fotografía (DoP)
+            </button>
+            <button data-cat="composer" class="stats-cat-btn px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-rose-400"></span> Compositores
+            </button>
+            <button data-cat="year" class="stats-cat-btn px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-indigo-400"></span> Años
+            </button>
+          </div>
+
+          <!-- Minimum movies filter for average ranking -->
+          <div class="flex items-center gap-2 bg-slate-900/90 px-3 py-1.5 rounded-xl border border-slate-800 text-xs">
+            <span class="text-slate-400">Mínimo para promedio:</span>
+            <select id="statsMinRatedSelect" class="bg-slate-950 text-white font-semibold px-2 py-1 rounded border border-slate-700 focus:outline-none">
+              <option value="1">1+ película puntuada</option>
+              <option value="2">2+ películas puntuadas</option>
+              <option value="3">3+ películas puntuadas</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Two Columns: Top by Watched Count & Top by Average Personal Score -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          
+          <!-- Column 1: Top Recuento (Cantidad de Películas Vistas) -->
+          <div class="bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden shadow-xl flex flex-col">
+            <div class="px-5 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-900">
+              <div>
+                <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                  <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
+                  </svg>
+                  <span id="topCountTitle">Top por Cantidad de Películas Vistas</span>
+                </h3>
+                <p class="text-[11px] text-slate-400">Ordenado por total de películas vistas en este perfil</p>
+              </div>
+              <span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-slate-800 text-slate-300">Recuento</span>
+            </div>
+            <div id="topCountList" class="p-4 space-y-2.5 max-h-[550px] overflow-y-auto divide-y divide-slate-800/40">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- Column 2: Top Mayor Puntaje Promedio (Mi Puntaje 1-100) -->
+          <div class="bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden shadow-xl flex flex-col">
+            <div class="px-5 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-900">
+              <div>
+                <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                  <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                  </svg>
+                  <span id="topScoreTitle">Top por Mayor Puntaje Promedio</span>
+                </h3>
+                <p class="text-[11px] text-slate-400">Calculado según el promedio de tus calificaciones (1 a 100)</p>
+              </div>
+              <span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-amber-950/80 text-amber-300 border border-amber-800/60">Promedio</span>
+            </div>
+            <div id="topScoreList" class="p-4 space-y-2.5 max-h-[550px] overflow-y-auto divide-y divide-slate-800/40">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
 
     <!-- RIGHT SIDEBAR / DETAILS DRAWER -->
     <aside id="detailsPanel" class="absolute top-0 right-0 bottom-0 w-80 sm:w-96 bg-slate-900/95 backdrop-blur-md border-l border-slate-800 p-5 z-20 flex flex-col shadow-2xl transition-transform duration-300 translate-x-full overflow-y-auto">
@@ -520,16 +652,29 @@
       movies: JSON.parse(JSON.stringify(SAMPLE_MOVIES)),
       currentProfile: "p1",
       profiles: {
-        p1: { name: "Mi Chart Personal", watched: ["m_inception", "m_oppenheimer", "m_interstellar", "m_dark_knight", "m_fight_club", "m_pulp_fiction"] },
-        p2: { name: "Perfil Amigo", watched: ["m_dune_1", "m_dune_2", "m_blade_runner_2049", "m_sicario", "m_arrival"] }
+        p1: {
+          name: "Mi Chart Personal",
+          watched: ["m_inception", "m_oppenheimer", "m_interstellar", "m_dark_knight", "m_fight_club", "m_pulp_fiction"],
+          ratings: { "m_inception": 92, "m_oppenheimer": 95, "m_interstellar": 90, "m_dark_knight": 96, "m_fight_club": 88, "m_pulp_fiction": 94 }
+        },
+        p2: {
+          name: "Perfil Amigo",
+          watched: ["m_dune_1", "m_dune_2", "m_blade_runner_2049", "m_sicario", "m_arrival"],
+          ratings: { "m_dune_1": 89, "m_dune_2": 96, "m_blade_runner_2049": 91 }
+        }
       },
       filterOnlyWatched: false,
       activeConnectionTypes: {
         director: true,
         cast: true,
         dop: true,
-        writer: true
+        writer: true,
+        composer: true,
+        year: true
       },
+      activeView: "graph",
+      statsCategory: "director",
+      statsMinRated: 1,
       selectedNodeId: null,
       selectedEdgeId: null,
       tmdbApiKey: ""
@@ -621,6 +766,49 @@
       "Zodiac": "https://image.tmdb.org/t/p/w500/6Y0hP5m1i8k9P50oGz1q1858485.jpg"
     };
 
+    const DEFAULT_COMPOSERS = {
+      "m_inception": "Hans Zimmer",
+      "m_oppenheimer": "Ludwig Göransson",
+      "m_interstellar": "Hans Zimmer",
+      "m_dark_knight": "Hans Zimmer, James Newton Howard",
+      "m_dunkirk": "Hans Zimmer",
+      "m_dune_1": "Hans Zimmer",
+      "m_dune_2": "Hans Zimmer",
+      "m_blade_runner_2049": "Hans Zimmer, Benjamin Wallfisch",
+      "m_sicario": "Jóhann Jóhannsson",
+      "m_arrival": "Jóhann Jóhannsson",
+      "m_pulp_fiction": "Varios / Sin compositor original",
+      "m_kill_bill": "RZA",
+      "m_django": "Ennio Morricone",
+      "m_shutter_island": "Robbie Robertson",
+      "m_fight_club": "The Dust Brothers",
+      "m_social_network": "Trent Reznor, Atticus Ross",
+      "m_se7en": "Howard Shore",
+      "m_once_upon_time": "Varios / Sin compositor original",
+      "m_goodfellas": "Varios / Sin compositor original",
+      "m_taxi_driver": "Bernard Herrmann",
+      "m_reservoir_dogs": "Varios / Sin compositor original",
+      "m_zodiac": "David Shire",
+      "m_no_country": "Carter Burwell",
+      "Inception": "Hans Zimmer",
+      "Oppenheimer": "Ludwig Göransson",
+      "Interstellar": "Hans Zimmer",
+      "The Dark Knight": "Hans Zimmer, James Newton Howard",
+      "Batman Begins": "Hans Zimmer, James Newton Howard",
+      "Dunkirk": "Hans Zimmer",
+      "Dune: Part One": "Hans Zimmer",
+      "Dune: Part Two": "Hans Zimmer",
+      "Blade Runner 2049": "Hans Zimmer, Benjamin Wallfisch",
+      "Sicario": "Jóhann Jóhannsson",
+      "Arrival": "Jóhann Jóhannsson",
+      "Goodfellas": "Varios / Sin compositor original",
+      "Taxi Driver": "Bernard Herrmann",
+      "Zodiac": "David Shire",
+      "Se7en": "Howard Shore",
+      "The Social Network": "Trent Reznor, Atticus Ross",
+      "Fight Club": "The Dust Brothers"
+    };
+
     function applyTitleFixes() {
       if (!state.movies) return;
       state.movies.forEach(m => {
@@ -634,7 +822,20 @@
         } else if (m.poster && m.poster.includes("unsplash.com") && OFFICIAL_POSTERS[m.title]) {
           m.poster = OFFICIAL_POSTERS[m.title];
         }
+        if (!m.composer || m.composer === "No especificado" || m.composer === "Desconocido") {
+          if (DEFAULT_COMPOSERS[m.id]) {
+            m.composer = DEFAULT_COMPOSERS[m.id];
+          } else if (DEFAULT_COMPOSERS[m.title]) {
+            m.composer = DEFAULT_COMPOSERS[m.title];
+          }
+        }
       });
+      if (state.profiles) {
+        Object.keys(state.profiles).forEach(k => {
+          if (!state.profiles[k].watched) state.profiles[k].watched = [];
+          if (!state.profiles[k].ratings) state.profiles[k].ratings = {};
+        });
+      }
     }
 
     // --- 3. GRAPH EDGES & SIMULATION ENGINE ---
@@ -655,36 +856,68 @@
             directors: [],
             writers: [],
             dops: [],
+            composers: [],
+            years: [],
             cast: []
           };
 
+          const isValidPerson = (str) => str && !["desconocido", "no especificado", "varios / sin compositor original", "n/a"].includes(str.trim().toLowerCase());
+
           // 1. Director match
-          if (state.activeConnectionTypes.director && m1.director && m2.director && m1.director.toLowerCase() === m2.director.toLowerCase()) {
-            connections.directors.push(m1.director);
+          if (state.activeConnectionTypes.director && isValidPerson(m1.director) && isValidPerson(m2.director)) {
+            const d1List = m1.director.split(",").map(s => s.trim());
+            const d2List = m2.director.split(",").map(s => s.trim());
+            d2List.forEach(d2 => {
+              if (d1List.some(d1 => d1.toLowerCase() === d2.toLowerCase())) {
+                connections.directors.push(d2);
+              }
+            });
           }
 
           // 2. Cinematographer (DoP) match
-          if (state.activeConnectionTypes.dop && m1.dop && m2.dop && m1.dop.toLowerCase() === m2.dop.toLowerCase()) {
-            connections.dops.push(m1.dop);
+          if (state.activeConnectionTypes.dop && isValidPerson(m1.dop) && isValidPerson(m2.dop)) {
+            const dop1List = m1.dop.split(",").map(s => s.trim());
+            const dop2List = m2.dop.split(",").map(s => s.trim());
+            dop2List.forEach(dp2 => {
+              if (dop1List.some(dp1 => dp1.toLowerCase() === dp2.toLowerCase())) {
+                connections.dops.push(dp2);
+              }
+            });
           }
 
           // 3. Screenwriters match
           if (state.activeConnectionTypes.writer && m1.writers && m2.writers) {
-            const w1 = m1.writers.map(w => w.toLowerCase());
-            m2.writers.forEach(w => {
+            const w1 = m1.writers.filter(isValidPerson).map(w => w.toLowerCase());
+            m2.writers.filter(isValidPerson).forEach(w => {
               if (w1.includes(w.toLowerCase())) connections.writers.push(w);
             });
           }
 
-          // 4. Cast match
+          // 4. Composer match
+          if (state.activeConnectionTypes.composer && isValidPerson(m1.composer) && isValidPerson(m2.composer)) {
+            const comp1List = m1.composer.split(",").map(s => s.trim()).filter(isValidPerson);
+            const comp2List = m2.composer.split(",").map(s => s.trim()).filter(isValidPerson);
+            comp2List.forEach(cp2 => {
+              if (comp1List.some(cp1 => cp1.toLowerCase() === cp2.toLowerCase())) {
+                connections.composers.push(cp2);
+              }
+            });
+          }
+
+          // 5. Release Year match
+          if (state.activeConnectionTypes.year && m1.year && m2.year && String(m1.year) === String(m2.year)) {
+            connections.years.push(String(m1.year));
+          }
+
+          // 6. Cast match
           if (state.activeConnectionTypes.cast && m1.cast && m2.cast) {
-            const c1 = m1.cast.map(c => c.toLowerCase());
-            m2.cast.forEach(c => {
+            const c1 = m1.cast.filter(isValidPerson).map(c => c.toLowerCase());
+            m2.cast.filter(isValidPerson).forEach(c => {
               if (c1.includes(c.toLowerCase())) connections.cast.push(c);
             });
           }
 
-          const totalPoints = connections.directors.length + connections.writers.length + connections.dops.length + connections.cast.length;
+          const totalPoints = connections.directors.length + connections.writers.length + connections.dops.length + connections.composers.length + connections.years.length + connections.cast.length;
 
           if (totalPoints > 0) {
             // Determine primary edge color/type for styling
@@ -699,6 +932,12 @@
             } else if (connections.writers.length > 0) {
               primaryType = "writer";
               color = "#34d399"; // emerald for writer
+            } else if (connections.composers.length > 0) {
+              primaryType = "composer";
+              color = "#fb7185"; // rose for composer
+            } else if (connections.years.length > 0 && connections.cast.length === 0) {
+              primaryType = "year";
+              color = "#818cf8"; // indigo for year
             }
 
             links.push({
@@ -749,12 +988,15 @@
       linkGroup = gContainer.append("g").attr("class", "links-layer");
       nodeGroup = gContainer.append("g").attr("class", "nodes-layer");
 
-      // Setup D3 Force Simulation
+      // Setup D3 Force Simulation (Balanced & damped so nodes don't fly away)
       simulation = d3.forceSimulation()
-        .force("link", d3.forceLink().id(d => d.id).distance(d => Math.max(90, 220 - d.strength * 25)))
-        .force("charge", d3.forceManyBody().strength(-380).distanceMax(650))
-        .force("center", d3.forceCenter(width / 2, height / 2).strength(0.05))
-        .force("collision", d3.forceCollide().radius(52).strength(0.8));
+        .velocityDecay(0.6)
+        .alphaDecay(0.05)
+        .force("link", d3.forceLink().id(d => d.id).distance(d => Math.max(105, 175 - d.strength * 12)).strength(0.25))
+        .force("charge", d3.forceManyBody().strength(-160).distanceMax(320))
+        .force("x", d3.forceX(width / 2).strength(0.06))
+        .force("y", d3.forceY(height / 2).strength(0.06))
+        .force("collision", d3.forceCollide().radius(48).strength(0.85));
 
       updateGraph();
     }
@@ -919,10 +1161,14 @@
         clearSelection();
       });
 
-      // Restart physics simulation
+      // Check if any nodes are brand new (missing x/y coordinates)
+      const hasNewNodes = visibleMovies.some(m => typeof m.x !== "number" || typeof m.y !== "number");
+
       simulation.nodes(visibleMovies);
       simulation.force("link").links(links);
-      simulation.alpha(0.7).restart();
+
+      // Gentle reheat so existing nodes stay calm instead of scattering
+      simulation.alpha(hasNewNodes ? 0.45 : 0.08).restart();
 
       simulation.on("tick", () => {
         linkSelection
@@ -936,11 +1182,14 @@
       });
 
       updateHighlights();
+      if (state.activeView === "stats") {
+        renderStatsView();
+      }
     }
 
-    // Drag handlers
+    // Drag handlers - subtle alphaTarget so other nodes don't scatter when moving one node
     function dragstarted(event, d) {
-      if (!event.active) simulation.alphaTarget(0.3).restart();
+      if (!event.active) simulation.alphaTarget(0.05).restart();
       d.fx = d.x;
       d.fy = d.y;
     }
@@ -1044,8 +1293,11 @@
     }
 
     function renderMovieDetails(movie) {
-      const activeWatched = state.profiles[state.currentProfile]?.watched || [];
+      const profile = state.profiles[state.currentProfile];
+      const activeWatched = profile?.watched || [];
       const isWatched = activeWatched.includes(movie.id);
+      if (!profile.ratings) profile.ratings = {};
+      const currentScore = profile.ratings[movie.id] !== undefined ? profile.ratings[movie.id] : "";
 
       const html = `
         <div class="space-y-4">
@@ -1053,9 +1305,17 @@
           <div class="relative rounded-xl overflow-hidden bg-slate-800 border border-slate-700/80 shadow-lg">
             <img src="${movie.poster}" alt="${movie.title}" class="w-full h-44 object-cover">
             <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
-            <div class="absolute bottom-3 left-3 right-3">
-              <span class="text-[10px] font-bold uppercase tracking-wider text-cyan-400 bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-800">${movie.year}</span>
-              <h2 class="text-lg font-bold text-white mt-1 leading-tight">${movie.title}</h2>
+            <div class="absolute bottom-3 left-3 right-3 flex items-end justify-between gap-2">
+              <div>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-cyan-400 bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-800">${movie.year}</span>
+                <h2 class="text-lg font-bold text-white mt-1 leading-tight">${movie.title}</h2>
+              </div>
+              ${isWatched && currentScore !== "" ? `
+                <div class="bg-amber-500/20 backdrop-blur-md border border-amber-400/60 rounded-xl px-2.5 py-1 text-center shrink-0">
+                  <div class="text-[9px] uppercase font-bold text-amber-300 leading-none">Mi Nota</div>
+                  <div class="text-base font-extrabold text-amber-400 leading-tight">${currentScore}<span class="text-[10px] text-amber-300/80 font-normal">/100</span></div>
+                </div>
+              ` : ''}
             </div>
           </div>
 
@@ -1069,8 +1329,26 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
             </svg>
-            <span>${isWatched ? '✓ Película Vista por ' + state.profiles[state.currentProfile].name : 'Marcar como Vista'}</span>
+            <span>${isWatched ? '✓ Película Vista por ' + profile.name : 'Marcar como Vista'}</span>
           </button>
+
+          <!-- Personal Rating Section (1 to 100) -->
+          <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-3 space-y-2">
+            <div class="flex items-center justify-between">
+              <label for="movieScoreInput" class="text-[11px] font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+                Mi Puntaje Personal (1 - 100)
+              </label>
+              ${currentScore !== "" ? `<button id="clearScoreBtn" class="text-[10px] text-slate-400 hover:text-red-400 transition">Borrar nota</button>` : ''}
+            </div>
+            <div class="flex items-center gap-3">
+              <input type="range" id="movieScoreSlider" min="1" max="100" value="${currentScore !== "" ? currentScore : 75}" class="flex-1 accent-amber-500 cursor-pointer h-1.5 bg-slate-800 rounded-lg">
+              <input type="number" id="movieScoreInput" min="1" max="100" placeholder="-" value="${currentScore}" class="w-16 bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-center text-xs font-bold text-amber-400 focus:outline-none focus:border-amber-500">
+            </div>
+            <p class="text-[10px] text-slate-400">Asignar un puntaje marca automáticamente la película como vista.</p>
+          </div>
 
           <!-- Synopsis -->
           ${movie.overview ? `
@@ -1102,6 +1380,16 @@
               </div>
             </div>
 
+            <!-- Composer -->
+            <div>
+              <div class="text-[10px] uppercase font-bold text-rose-400 flex items-center gap-1.5 mb-1">
+                <span class="w-2 h-2 rounded-full bg-rose-400"></span> Compositor (Música Original)
+              </div>
+              <div class="text-xs text-slate-200 font-medium bg-slate-800/60 p-2 rounded-lg border border-slate-700/50">
+                ${movie.composer || 'No especificado'}
+              </div>
+            </div>
+
             <!-- Screenwriters -->
             <div>
               <div class="text-[10px] uppercase font-bold text-emerald-400 flex items-center gap-1.5 mb-1">
@@ -1109,6 +1397,16 @@
               </div>
               <div class="text-xs text-slate-200 font-medium bg-slate-800/60 p-2 rounded-lg border border-slate-700/50">
                 ${(movie.writers && movie.writers.length) ? movie.writers.join(", ") : 'No especificado'}
+              </div>
+            </div>
+
+            <!-- Year -->
+            <div>
+              <div class="text-[10px] uppercase font-bold text-indigo-400 flex items-center gap-1.5 mb-1">
+                <span class="w-2 h-2 rounded-full bg-indigo-400"></span> Año de Estreno
+              </div>
+              <div class="text-xs text-slate-200 font-medium bg-slate-800/60 p-2 rounded-lg border border-slate-700/50">
+                ${movie.year || 'No especificado'}
               </div>
             </div>
 
@@ -1146,6 +1444,38 @@
         toggleWatchedMovie(movie.id);
         renderMovieDetails(movie);
       });
+
+      // Bind personal score slider & number input (1 to 100)
+      const sliderEl = document.getElementById("movieScoreSlider");
+      const inputEl = document.getElementById("movieScoreInput");
+      const saveScore = (val) => {
+        let num = parseInt(val);
+        if (isNaN(num)) return;
+        num = Math.max(1, Math.min(100, num));
+        profile.ratings[movie.id] = num;
+        if (!profile.watched.includes(movie.id)) {
+          profile.watched.push(movie.id);
+        }
+        saveState();
+        updateGraph();
+        renderMovieDetails(movie);
+      };
+
+      sliderEl.addEventListener("change", (e) => saveScore(e.target.value));
+      sliderEl.addEventListener("input", (e) => {
+        inputEl.value = e.target.value;
+      });
+      inputEl.addEventListener("change", (e) => saveScore(e.target.value));
+
+      const clearScoreBtn = document.getElementById("clearScoreBtn");
+      if (clearScoreBtn) {
+        clearScoreBtn.addEventListener("click", () => {
+          delete profile.ratings[movie.id];
+          saveState();
+          if (state.activeView === "stats") renderStatsView();
+          renderMovieDetails(movie);
+        });
+      }
 
       // Bind delete movie action
       document.getElementById("deleteMovieBtn").addEventListener("click", () => {
@@ -1189,6 +1519,28 @@
               <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Guionistas en Común
             </span>
             <p class="text-sm font-semibold text-white mt-1">${conn.writers.join(", ")}</p>
+          </div>
+        `;
+      }
+
+      if (conn.composers && conn.composers.length > 0) {
+        itemsHtml += `
+          <div class="bg-rose-950/40 border border-rose-800/60 rounded-xl p-3">
+            <span class="text-[10px] font-bold text-rose-400 uppercase tracking-wider flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-rose-400"></span> Mismo Compositor (Música)
+            </span>
+            <p class="text-sm font-semibold text-white mt-1">${conn.composers.join(", ")}</p>
+          </div>
+        `;
+      }
+
+      if (conn.years && conn.years.length > 0) {
+        itemsHtml += `
+          <div class="bg-indigo-950/40 border border-indigo-800/60 rounded-xl p-3">
+            <span class="text-[10px] font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-indigo-400"></span> Mismo Año de Estreno
+            </span>
+            <p class="text-sm font-semibold text-white mt-1">${conn.years.join(", ")}</p>
           </div>
         `;
       }
@@ -1449,13 +1801,19 @@
 
         // Extract Director of Photography
         const dopObj = credits.crew ? credits.crew.find(c => c.job === "Director of Photography" || c.job === "Cinematography") : null;
-        const dop = dopObj ? dopObj.name : "Desconocido";
+        const dop = dopObj ? dopObj.name : "No especificado";
+
+        // Extract Original Music Composer
+        const composerList = credits.crew
+          ? [...new Set(credits.crew.filter(c => c.job === "Original Music Composer" || c.job === "Music" || c.job === "Composer").map(c => c.name))]
+          : [];
+        const composer = composerList.length > 0 ? composerList.join(", ") : "No especificado";
 
         // Extract Writers
-        const writers = credits.crew ? credits.crew.filter(c => c.job === "Screenplay" || c.job === "Writer").map(c => c.name) : [];
+        const writers = credits.crew ? [...new Set(credits.crew.filter(c => c.job === "Screenplay" || c.job === "Writer" || c.job === "Story").map(c => c.name))] : [];
 
         // Extract top cast
-        const cast = credits.cast ? credits.cast.slice(0, 8).map(c => c.name) : [];
+        const cast = credits.cast ? credits.cast.slice(0, 10).map(c => c.name) : [];
 
         // Title strictly in English: prioritize English release title from enData, fallback to original_title or baseMovie
         const englishTitle = (enData && enData.title) ? enData.title : (baseMovie.original_title || baseMovie.title);
@@ -1477,6 +1835,7 @@
           year: releaseYear,
           director: director,
           dop: dop,
+          composer: composer,
           writers: writers.length ? writers : [director],
           cast: cast,
           poster: posterPath ? `https://image.tmdb.org/t/p/w500${posterPath}` : 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=500&auto=format&fit=crop&q=60',
@@ -1535,6 +1894,166 @@
       container.appendChild(card);
     }
 
+
+    // --- 5B. PERSONAL STATS & RANKINGS ENGINE ---
+    function renderStatsView() {
+      const profile = state.profiles[state.currentProfile];
+      if (!profile) return;
+      if (!profile.ratings) profile.ratings = {};
+
+      document.getElementById("statsProfileName").textContent = profile.name;
+
+      const watchedIds = new Set(profile.watched || []);
+      const watchedMovies = state.movies.filter(m => watchedIds.has(m.id));
+
+      // Overall summary numbers
+      let totalRated = 0;
+      let sumRatings = 0;
+      watchedMovies.forEach(m => {
+        const r = profile.ratings[m.id];
+        if (typeof r === "number" && !isNaN(r)) {
+          totalRated++;
+          sumRatings += r;
+        }
+      });
+
+      document.getElementById("statsSummaryWatched").textContent = watchedMovies.length;
+      document.getElementById("statsSummaryRated").textContent = totalRated;
+      document.getElementById("statsSummaryAvg").textContent = totalRated > 0
+        ? (sumRatings / totalRated).toFixed(1).replace(".0", "")
+        : "-";
+
+      // Group items by selected category (director, cast, writer, dop, composer, year)
+      const cat = state.statsCategory || "director";
+      const minRated = state.statsMinRated || 1;
+      const statsMap = new Map();
+
+      const isInvalid = (val) => !val || ["desconocido", "no especificado", "varios / sin compositor original", "n/a"].includes(String(val).trim().toLowerCase());
+
+      const addEntry = (entityName, movie) => {
+        if (isInvalid(entityName)) return;
+        const cleanName = String(entityName).trim();
+        if (!statsMap.has(cleanName)) {
+          statsMap.set(cleanName, {
+            name: cleanName,
+            count: 0,
+            ratedCount: 0,
+            ratingSum: 0,
+            movies: []
+          });
+        }
+        const item = statsMap.get(cleanName);
+        item.count++;
+        const score = profile.ratings[movie.id];
+        if (typeof score === "number" && !isNaN(score)) {
+          item.ratedCount++;
+          item.ratingSum += score;
+        }
+        item.movies.push({ title: movie.title, year: movie.year, score: score });
+      };
+
+      watchedMovies.forEach(m => {
+        if (cat === "director" && m.director) {
+          m.director.split(",").forEach(d => addEntry(d, m));
+        } else if (cat === "dop" && m.dop) {
+          m.dop.split(",").forEach(dp => addEntry(dp, m));
+        } else if (cat === "composer" && m.composer) {
+          m.composer.split(",").forEach(cp => addEntry(cp, m));
+        } else if (cat === "writer" && Array.isArray(m.writers)) {
+          m.writers.forEach(w => addEntry(w, m));
+        } else if (cat === "cast" && Array.isArray(m.cast)) {
+          m.cast.forEach(c => addEntry(c, m));
+        } else if (cat === "year" && m.year) {
+          addEntry(String(m.year), m);
+        }
+      });
+
+      const allItems = Array.from(statsMap.values()).map(item => ({
+        ...item,
+        avgScore: item.ratedCount > 0 ? (item.ratingSum / item.ratedCount) : null
+      }));
+
+      // 1. Sort by Watched Count descending (tie-break by avgScore descending)
+      const byCount = [...allItems].sort((a, b) => {
+        if (b.count !== a.count) return b.count - a.count;
+        return (b.avgScore || 0) - (a.avgScore || 0);
+      });
+
+      // 2. Sort by Average Score descending (filtered by minRated, tie-break by ratedCount descending)
+      const byScore = allItems
+        .filter(item => item.ratedCount >= minRated && item.avgScore !== null)
+        .sort((a, b) => {
+          if (b.avgScore !== a.avgScore) return b.avgScore - a.avgScore;
+          return b.ratedCount - a.ratedCount;
+        });
+
+      const countContainer = document.getElementById("topCountList");
+      const scoreContainer = document.getElementById("topScoreList");
+
+      if (byCount.length === 0) {
+        countContainer.innerHTML = `<div class="p-6 text-center text-xs text-slate-400">No hay películas vistas registradas para esta categoría todavía.</div>`;
+      } else {
+        const maxCount = byCount[0].count || 1;
+        countContainer.innerHTML = byCount.slice(0, 30).map((item, idx) => {
+          const pct = Math.max(8, Math.round((item.count / maxCount) * 100));
+          const moviesList = item.movies.map(m => m.score !== undefined ? `${m.title} (${m.score})` : m.title).join(" • ");
+          return `
+            <div class="pt-2.5 first:pt-0">
+              <div class="flex items-center justify-between text-xs mb-1">
+                <div class="flex items-center gap-2 min-w-0 pr-2">
+                  <span class="w-5 h-5 rounded-md bg-slate-800 text-slate-400 font-mono text-[10px] flex items-center justify-center shrink-0">${idx + 1}</span>
+                  <span class="font-bold text-white truncate">${item.name}</span>
+                </div>
+                <div class="flex items-center gap-2 shrink-0">
+                  ${item.avgScore !== null ? `<span class="text-[10px] text-amber-400 font-medium">Prom: ${item.avgScore.toFixed(1).replace(".0", "")}</span>` : ''}
+                  <span class="px-2 py-0.5 rounded-md bg-cyan-950 text-cyan-300 border border-cyan-800/60 font-bold text-xs">
+                    ${item.count} ${item.count === 1 ? 'peli' : 'pelis'}
+                  </span>
+                </div>
+              </div>
+              <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden mb-1">
+                <div class="h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full" style="width: ${pct}%"></div>
+              </div>
+              <p class="text-[10px] text-slate-400 truncate" title="${moviesList}">${moviesList}</p>
+            </div>
+          `;
+        }).join("");
+      }
+
+      if (byScore.length === 0) {
+        scoreContainer.innerHTML = `<div class="p-6 text-center text-xs text-slate-400">Puntúa tus películas vistas (de 1 a 100) seleccionando cualquier nodo en el grafo para ver el ranking de mejores promedios.</div>`;
+      } else {
+        scoreContainer.innerHTML = byScore.slice(0, 30).map((item, idx) => {
+          const pct = Math.max(8, Math.round(item.avgScore));
+          const avgFormatted = Number.isInteger(item.avgScore) ? item.avgScore : item.avgScore.toFixed(1).replace(".", ",");
+          const ratedMoviesList = item.movies
+            .filter(m => m.score !== undefined)
+            .map(m => `${m.title}: ${m.score}`)
+            .join(" • ");
+          return `
+            <div class="pt-2.5 first:pt-0">
+              <div class="flex items-center justify-between text-xs mb-1">
+                <div class="flex items-center gap-2 min-w-0 pr-2">
+                  <span class="w-5 h-5 rounded-md bg-slate-800 text-amber-400 font-mono text-[10px] flex items-center justify-center shrink-0">${idx + 1}</span>
+                  <span class="font-bold text-white truncate">${item.name}</span>
+                </div>
+                <div class="flex items-center gap-2 shrink-0">
+                  <span class="text-[10px] text-slate-400">${item.ratedCount} ${item.ratedCount === 1 ? 'puntuada' : 'puntuadas'}</span>
+                  <span class="px-2 py-0.5 rounded-md bg-amber-950/90 text-amber-300 border border-amber-700/60 font-extrabold text-xs">
+                    ★ ${avgFormatted}
+                  </span>
+                </div>
+              </div>
+              <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden mb-1">
+                <div class="h-full bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full" style="width: ${pct}%"></div>
+              </div>
+              <p class="text-[10px] text-slate-400 truncate" title="${ratedMoviesList}">${ratedMoviesList}</p>
+            </div>
+          `;
+        }).join("");
+      }
+    }
+
     // --- 6. EVENT LISTENERS & UI SETUP ---
     document.addEventListener("DOMContentLoaded", () => {
       applyTitleFixes();
@@ -1583,7 +2102,7 @@
         const name = nameInput.value.trim();
         if (name) {
           const newId = "p_" + Date.now();
-          state.profiles[newId] = { name: name, watched: [] };
+          state.profiles[newId] = { name: name, watched: [], ratings: {} };
           state.currentProfile = newId;
 
           // Add option to select
@@ -1616,6 +2135,46 @@
       bindCheckbox("filterCast", "cast");
       bindCheckbox("filterDop", "dop");
       bindCheckbox("filterWriter", "writer");
+      bindCheckbox("filterComposer", "composer");
+      bindCheckbox("filterYear", "year");
+
+      // Main View Tabs (Grafo vs Top & Rankings)
+      const viewGraphTabBtn = document.getElementById("viewGraphTabBtn");
+      const viewStatsTabBtn = document.getElementById("viewStatsTabBtn");
+      const statsViewSection = document.getElementById("statsViewSection");
+
+      viewGraphTabBtn.addEventListener("click", () => {
+        state.activeView = "graph";
+        statsViewSection.classList.add("hidden");
+        viewGraphTabBtn.className = "px-3 py-1.5 rounded-lg text-white font-semibold bg-cyan-600 shadow-sm flex items-center gap-1.5 transition-all";
+        viewStatsTabBtn.className = "px-3 py-1.5 rounded-lg text-slate-300 hover:text-white font-medium flex items-center gap-1.5 transition-all";
+      });
+
+      viewStatsTabBtn.addEventListener("click", () => {
+        state.activeView = "stats";
+        renderStatsView();
+        statsViewSection.classList.remove("hidden");
+        viewStatsTabBtn.className = "px-3 py-1.5 rounded-lg text-white font-semibold bg-cyan-600 shadow-sm flex items-center gap-1.5 transition-all";
+        viewGraphTabBtn.className = "px-3 py-1.5 rounded-lg text-slate-300 hover:text-white font-medium flex items-center gap-1.5 transition-all";
+      });
+
+      // Stats Category Pills
+      document.querySelectorAll(".stats-cat-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          state.statsCategory = btn.getAttribute("data-cat");
+          document.querySelectorAll(".stats-cat-btn").forEach(b => {
+            b.className = "stats-cat-btn px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition flex items-center gap-1.5";
+          });
+          btn.className = "stats-cat-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-cyan-600 text-white transition flex items-center gap-1.5";
+          renderStatsView();
+        });
+      });
+
+      // Minimum rated filter in stats
+      document.getElementById("statsMinRatedSelect").addEventListener("change", (e) => {
+        state.statsMinRated = parseInt(e.target.value) || 1;
+        renderStatsView();
+      });
 
       // Zoom Buttons
       document.getElementById("zoomInBtn").addEventListener("click", () => {
@@ -1760,33 +2319,44 @@
         settingsModal.classList.add("hidden");
       });
 
-      // Sync titles to English action
+      // Sync titles & missing composers/years from TMDb
       document.getElementById("syncTitlesBtn").addEventListener("click", async () => {
         const btn = document.getElementById("syncTitlesBtn");
-        btn.textContent = "Actualizando títulos...";
+        btn.textContent = "Sincronizando datos con TMDb...";
         applyTitleFixes();
 
         if (state.tmdbApiKey && state.tmdbApiKey.trim().length > 5) {
           for (const m of state.movies) {
             if (m.tmdbId) {
               try {
-                const res = await fetch(`https://api.themoviedb.org/3/movie/${m.tmdbId}?api_key=${state.tmdbApiKey}&language=en-US`);
+                const [res, credRes] = await Promise.all([
+                  fetch(`https://api.themoviedb.org/3/movie/${m.tmdbId}?api_key=${state.tmdbApiKey}&language=en-US`),
+                  fetch(`https://api.themoviedb.org/3/movie/${m.tmdbId}/credits?api_key=${state.tmdbApiKey}&language=es-ES`)
+                ]);
                 if (res.ok) {
                   const data = await res.json();
                   if (data.title) m.title = data.title;
+                  if (data.release_date) m.year = parseInt(data.release_date.split("-")[0]);
+                }
+                if (credRes.ok) {
+                  const credits = await credRes.json();
+                  if (credits.crew) {
+                    const compList = [...new Set(credits.crew.filter(c => c.job === "Original Music Composer" || c.job === "Music" || c.job === "Composer").map(c => c.name))];
+                    if (compList.length > 0) m.composer = compList.join(", ");
+                  }
                 }
               } catch(e) {
-                console.warn("Error updating title:", e);
+                console.warn("Error updating movie metadata:", e);
               }
             }
           }
         }
         saveState();
         updateGraph();
-        btn.textContent = "✓ Títulos actualizados a inglés";
+        btn.textContent = "✓ Títulos y compositores actualizados";
         setTimeout(() => {
           btn.textContent = "Actualizar títulos existentes a inglés";
-        }, 2000);
+        }, 2200);
       });
 
       // Reset Sample Data
