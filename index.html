@@ -175,6 +175,10 @@
         Recentrar
       </button>
       <div class="w-px h-5 bg-slate-800 mx-0.5"></div>
+      <button id="spacingToggleBtn" class="px-2.5 h-8 flex items-center justify-center text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg text-xs font-medium transition" title="Alternar espaciado entre nodos">
+        Espaciado: <span id="spacingLabel" class="text-cyan-400 font-semibold ml-1">Medio</span>
+      </button>
+      <div class="w-px h-5 bg-slate-800 mx-0.5"></div>
       <button id="reheatSimulationBtn" class="p-1.5 text-slate-300 hover:text-cyan-400 hover:bg-slate-800 rounded-lg text-xs transition" title="Reacomodar nodos físicamente">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -974,29 +978,29 @@
 
       svg.call(zoomBehavior);
 
-      // Defs for circular poster clipPath
+      // Defs for circular poster clipPath (sleek, well-proportioned radius)
       const defs = svg.append("defs");
       defs.append("clipPath")
         .attr("id", "nodePosterClip")
         .append("circle")
         .attr("cx", 0)
         .attr("cy", 0)
-        .attr("r", 26);
+        .attr("r", 22);
 
       // Root layer for panning/zooming
       gContainer = svg.append("g").attr("class", "graph-root");
       linkGroup = gContainer.append("g").attr("class", "links-layer");
       nodeGroup = gContainer.append("g").attr("class", "nodes-layer");
 
-      // Setup D3 Force Simulation (Balanced & damped so nodes don't fly away)
+      // Setup D3 Force Simulation (Sweet spot: ample breathing room, calm & stable)
       simulation = d3.forceSimulation()
-        .velocityDecay(0.6)
-        .alphaDecay(0.05)
-        .force("link", d3.forceLink().id(d => d.id).distance(d => Math.max(105, 175 - d.strength * 12)).strength(0.25))
-        .force("charge", d3.forceManyBody().strength(-160).distanceMax(320))
-        .force("x", d3.forceX(width / 2).strength(0.06))
-        .force("y", d3.forceY(height / 2).strength(0.06))
-        .force("collision", d3.forceCollide().radius(48).strength(0.85));
+        .velocityDecay(0.48)
+        .alphaDecay(0.04)
+        .force("link", d3.forceLink().id(d => d.id).distance(d => Math.max(155, 235 - d.strength * 12)).strength(0.20))
+        .force("charge", d3.forceManyBody().strength(-310).distanceMax(580))
+        .force("x", d3.forceX(width / 2).strength(0.022))
+        .force("y", d3.forceY(height / 2).strength(0.022))
+        .force("collision", d3.forceCollide().radius(58).strength(0.92));
 
       updateGraph();
     }
@@ -1032,8 +1036,8 @@
         .join(
           enter => enter.append("line")
             .attr("stroke", d => d.color)
-            .attr("stroke-width", d => Math.min(6, 1.2 + d.strength * 0.8))
-            .attr("stroke-opacity", 0.45)
+            .attr("stroke-width", d => Math.min(4.5, 1.1 + d.strength * 0.55))
+            .attr("stroke-opacity", 0.32)
             .attr("class", "transition-all cursor-pointer")
             .on("click", (event, d) => {
               event.stopPropagation();
@@ -1049,7 +1053,7 @@
             }),
           update => update
             .attr("stroke", d => d.color)
-            .attr("stroke-width", d => Math.min(6, 1.2 + d.strength * 0.8)),
+            .attr("stroke-width", d => Math.min(4.5, 1.1 + d.strength * 0.55)),
           exit => exit.remove()
         );
 
@@ -1074,69 +1078,69 @@
             // Dark background circle behind poster
             g.append("circle")
               .attr("class", "node-bg")
-              .attr("r", 26)
+              .attr("r", 22)
               .attr("fill", "#090d16");
 
-            // Movie Poster image clipped to circle
+            // Movie Poster image clipped to circle (proportional & crisp)
             g.append("image")
               .attr("class", "node-poster pointer-events-none")
               .attr("href", d => d.poster || "https://image.tmdb.org/t/p/w500/aKuFiU82s5ISJpGZp7YkIr3kCUd.jpg")
-              .attr("x", -26)
-              .attr("y", -39)
-              .attr("width", 52)
-              .attr("height", 78)
+              .attr("x", -22)
+              .attr("y", -33)
+              .attr("width", 44)
+              .attr("height", 66)
               .attr("preserveAspectRatio", "xMidYMid slice")
               .attr("clip-path", "url(#nodePosterClip)");
 
             // Outer cyan glowing ring
             g.append("circle")
               .attr("class", "node-ring pointer-events-none")
-              .attr("r", 32)
+              .attr("r", 27)
               .attr("fill", "transparent")
               .attr("stroke", d => d.color || "#38bdf8")
-              .attr("stroke-width", 1.5)
-              .attr("stroke-opacity", 0.4);
+              .attr("stroke-width", 1.4)
+              .attr("stroke-opacity", 0.35);
 
             // Core circular cyan border around poster
             g.append("circle")
               .attr("class", "node-circle pointer-events-none")
-              .attr("r", 26)
+              .attr("r", 22)
               .attr("fill", "transparent")
               .attr("stroke", d => d.color || "#38bdf8")
-              .attr("stroke-width", 2.5);
+              .attr("stroke-width", 2.2);
 
             // Watched icon / mark
             g.append("circle")
               .attr("class", "node-watched-badge")
-              .attr("cx", 18)
-              .attr("cy", -18)
-              .attr("r", 6.5)
+              .attr("cx", 15)
+              .attr("cy", -15)
+              .attr("r", 5.5)
               .attr("fill", "#10b981")
               .attr("stroke", "#020617")
-              .attr("stroke-width", 2)
+              .attr("stroke-width", 1.8)
               .attr("display", d => activeWatched.includes(d.id) ? "block" : "none");
 
             // Movie Title Label below
             g.append("text")
               .attr("class", "node-label pointer-events-none")
-              .attr("y", 42)
+              .attr("y", 35)
               .attr("text-anchor", "middle")
               .attr("fill", "#f8fafc")
-              .attr("font-size", "11px")
+              .attr("font-size", "10.5px")
               .attr("font-weight", "600")
               .attr("paint-order", "stroke")
               .attr("stroke", "#020617")
-              .attr("stroke-width", 3.5)
+              .attr("stroke-width", 3.2)
               .attr("stroke-linejoin", "round")
               .text(d => d.title.length > 20 ? d.title.substring(0, 18) + "…" : d.title);
 
             // Release year subtitle
             g.append("text")
               .attr("class", "node-year pointer-events-none")
-              .attr("y", 54)
+              .attr("y", 46)
               .attr("text-anchor", "middle")
               .attr("fill", "#94a3b8")
-              .attr("font-size", "9px")
+              .attr("font-size", "8.5px")
               .attr("font-weight", "normal")
               .text(d => d.year || "");
 
@@ -2186,6 +2190,39 @@
       document.getElementById("zoomResetBtn").addEventListener("click", () => {
         svg.transition().duration(400).call(zoomBehavior.transform, d3.zoomIdentity);
       });
+      // Spacing Mode Toggle (Medio / Amplio / Compacto)
+      let spacingModes = ["Medio", "Amplio", "Compacto"];
+      let currentSpacingIdx = 0;
+      const spacingToggleBtn = document.getElementById("spacingToggleBtn");
+      const spacingLabel = document.getElementById("spacingLabel");
+
+      if (spacingToggleBtn) {
+        spacingToggleBtn.addEventListener("click", () => {
+          currentSpacingIdx = (currentSpacingIdx + 1) % spacingModes.length;
+          const mode = spacingModes[currentSpacingIdx];
+          spacingLabel.textContent = mode;
+
+          let baseDist = 155;
+          let chargeVal = -310;
+          let collideRad = 58;
+
+          if (mode === "Amplio") {
+            baseDist = 210;
+            chargeVal = -420;
+            collideRad = 70;
+          } else if (mode === "Compacto") {
+            baseDist = 120;
+            chargeVal = -200;
+            collideRad = 48;
+          }
+
+          simulation.force("link").distance(d => Math.max(baseDist, baseDist + 75 - d.strength * 12));
+          simulation.force("charge").strength(chargeVal);
+          simulation.force("collision").radius(collideRad);
+          simulation.alpha(0.35).restart();
+        });
+      }
+
       document.getElementById("reheatSimulationBtn").addEventListener("click", () => {
         simulation.alpha(0.8).restart();
       });
