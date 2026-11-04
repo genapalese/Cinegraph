@@ -31,6 +31,12 @@
       stroke-opacity: 1 !important;
       filter: drop-shadow(0 0 6px rgba(251, 191, 36, 0.8));
     }
+    .line-clamp-3 {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
     /* Custom scrollbars */
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.6); }
@@ -371,16 +377,16 @@
       </div>
     </section>
 
-    <!-- RIGHT SIDEBAR / DETAILS DRAWER -->
-    <aside id="detailsPanel" class="absolute top-0 right-0 bottom-0 w-80 sm:w-96 bg-slate-900/95 backdrop-blur-md border-l border-slate-800 p-5 z-20 flex flex-col shadow-2xl transition-transform duration-300 translate-x-full overflow-y-auto">
-      <!-- Close drawer button -->
-      <button id="closeDetailsBtn" class="absolute top-4 right-4 text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+    <!-- RIGHT SIDEBAR / DETAILS DRAWER (z-40 so it displays over Graph, Rankings, and Top Películas) -->
+    <aside id="detailsPanel" class="absolute top-0 right-0 bottom-0 w-80 sm:w-96 bg-slate-900/95 backdrop-blur-md border-l border-slate-800 p-5 z-40 flex flex-col shadow-2xl transition-transform duration-300 translate-x-full overflow-y-auto">
+      <!-- Close drawer button (floating circular badge, crisp & visible over any poster) -->
+      <button id="closeDetailsBtn" class="absolute top-3.5 right-3.5 z-30 w-8 h-8 flex items-center justify-center rounded-full bg-slate-950/85 hover:bg-slate-900 text-slate-200 hover:text-white border border-slate-700/80 shadow-lg backdrop-blur-md transition" title="Cerrar panel">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M6 18L18 6M6 6l12 12" />
         </svg>
       </button>
 
-      <div id="detailsContent" class="space-y-4 pt-2">
+      <div id="detailsContent" class="space-y-4">
         <!-- Content injected dynamically for movie or edge -->
       </div>
     </aside>
@@ -1597,17 +1603,17 @@
 
       const html = `
         <div class="space-y-4">
-          <!-- Poster / Header Banner -->
-          <div class="relative rounded-xl overflow-hidden bg-slate-800 border border-slate-700/80 shadow-lg">
-            <img src="${movie.poster}" alt="${movie.title}" class="w-full h-44 object-cover">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
+          <!-- Poster / Header Banner (Full uncropped poster with dark gradient bottom overlay) -->
+          <div class="relative rounded-xl overflow-hidden bg-slate-950 border border-slate-700/80 shadow-lg">
+            <img src="${movie.poster}" alt="${movie.title}" class="w-full h-auto max-h-[420px] object-contain mx-auto block">
+            <div class="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent pointer-events-none"></div>
             <div class="absolute bottom-3 left-3 right-3 flex items-end justify-between gap-2">
               <div>
-                <span class="text-[10px] font-bold uppercase tracking-wider text-cyan-400 bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-800">${movie.year}</span>
-                <h2 class="text-lg font-bold text-white mt-1 leading-tight">${movie.title}</h2>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-cyan-400 bg-cyan-950/90 px-2 py-0.5 rounded border border-cyan-800 shadow">${movie.year}</span>
+                <h2 class="text-lg font-bold text-white mt-1 leading-tight drop-shadow">${movie.title}</h2>
               </div>
               ${isWatched && currentScore !== "" ? `
-                <div class="bg-amber-500/20 backdrop-blur-md border border-amber-400/60 rounded-xl px-2.5 py-1 text-center shrink-0">
+                <div class="bg-amber-500/20 backdrop-blur-md border border-amber-400/60 rounded-xl px-2.5 py-1 text-center shrink-0 shadow">
                   <div class="text-[9px] uppercase font-bold text-amber-300 leading-none">Mi Nota</div>
                   <div class="text-base font-extrabold text-amber-400 leading-tight">${currentScore}<span class="text-[10px] text-amber-300/80 font-normal">/100</span></div>
                 </div>
@@ -1656,11 +1662,16 @@
             <p class="text-[10px] text-slate-400">Asignar un puntaje marca automáticamente la película como vista.</p>
           </div>
 
-          <!-- Synopsis -->
+          <!-- Synopsis (3-line clamp with "Más" toggle) -->
           ${movie.overview ? `
             <div class="space-y-1">
               <h3 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Sinopsis</h3>
-              <p class="text-xs text-slate-300 leading-relaxed">${movie.overview}</p>
+              <p id="movieSynopsisText" class="text-xs text-slate-300 leading-relaxed line-clamp-3">${movie.overview}</p>
+              ${movie.overview.length > 135 ? `
+                <button id="toggleSynopsisBtn" class="text-[11px] font-semibold text-cyan-400 hover:text-cyan-300 transition pt-0.5">
+                  Más
+                </button>
+              ` : ''}
             </div>
           ` : ''}
 
@@ -1799,6 +1810,22 @@
           if (state.activeView === "stats") renderStatsView();
           if (state.activeView === "moviesRank") renderMoviesRankView();
           renderMovieDetails(movie);
+        });
+      }
+
+      // Bind synopsis "Más" / "Menos" toggle
+      const toggleSynopsisBtn = document.getElementById("toggleSynopsisBtn");
+      const synopsisText = document.getElementById("movieSynopsisText");
+      if (toggleSynopsisBtn && synopsisText) {
+        toggleSynopsisBtn.addEventListener("click", () => {
+          const isClamped = synopsisText.classList.contains("line-clamp-3");
+          if (isClamped) {
+            synopsisText.classList.remove("line-clamp-3");
+            toggleSynopsisBtn.textContent = "Menos";
+          } else {
+            synopsisText.classList.add("line-clamp-3");
+            toggleSynopsisBtn.textContent = "Más";
+          }
         });
       }
 
