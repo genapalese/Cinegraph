@@ -829,21 +829,35 @@
     }
 
     function getCleanPayloadForSave() {
-      // Strip temporary D3 velocity vectors while keeping movie metadata clean
-      const cleanMovies = (state.movies || []).map(m => ({
-        id: m.id,
-        tmdbId: m.tmdbId,
-        title: m.title,
-        year: m.year,
-        director: m.director,
-        dop: m.dop,
-        composer: m.composer,
-        writers: m.writers,
-        cast: m.cast,
-        poster: m.poster,
-        overview: m.overview,
-        color: m.color || "#38bdf8"
-      }));
+      // Preserve movie metadata AND saved spatial coordinates (x, y, fx, fy, pinned)
+      const cleanMovies = (state.movies || []).map(m => {
+        const hasCoords = typeof m.x === "number" && !isNaN(m.x) && typeof m.y === "number" && !isNaN(m.y);
+        const rx = hasCoords ? Math.round(m.x) : undefined;
+        const ry = hasCoords ? Math.round(m.y) : undefined;
+        const isPinned = Boolean(m.pinned);
+        const rfx = isPinned && typeof m.fx === "number" && !isNaN(m.fx) ? Math.round(m.fx) : (isPinned && rx !== undefined ? rx : null);
+        const rfy = isPinned && typeof m.fy === "number" && !isNaN(m.fy) ? Math.round(m.fy) : (isPinned && ry !== undefined ? ry : null);
+
+        return {
+          id: m.id,
+          tmdbId: m.tmdbId,
+          title: m.title,
+          year: m.year,
+          director: m.director,
+          dop: m.dop,
+          composer: m.composer,
+          writers: m.writers,
+          cast: m.cast,
+          poster: m.poster,
+          overview: m.overview,
+          color: m.color || "#38bdf8",
+          x: rx,
+          y: ry,
+          fx: rfx,
+          fy: rfy,
+          pinned: isPinned
+        };
+      });
 
       return {
         movies: cleanMovies,
@@ -1077,6 +1091,17 @@
       if (!state.profiles.p1.watched) state.profiles.p1.watched = [];
       if (!state.profiles.p1.ratings) state.profiles.p1.ratings = {};
       state.currentProfile = "p1";
+
+      // Restore fixed coordinates for manually pinned nodes
+      state.movies.forEach(m => {
+        if (m.pinned && typeof m.x === "number" && typeof m.y === "number") {
+          m.fx = typeof m.fx === "number" ? m.fx : m.x;
+          m.fy = typeof m.fy === "number" ? m.fy : m.y;
+        } else if (!m.pinned) {
+          m.fx = null;
+          m.fy = null;
+        }
+      });
     }
 
     // --- 3. GRAPH EDGES & SIMULATION ENGINE ---
@@ -1402,14 +1427,14 @@
         clearSelection();
       });
 
-      // Check if any nodes are brand new (missing x/y coordinates)
+      // Check if any nodes are brand new (missing saved x/y coordinates)
       const hasNewNodes = visibleMovies.some(m => typeof m.x !== "number" || typeof m.y !== "number");
 
       simulation.nodes(visibleMovies);
       simulation.force("link").links(links);
 
-      // Gentle reheat so existing nodes stay calm instead of scattering
-      simulation.alpha(hasNewNodes ? 0.45 : 0.08).restart();
+      // If all nodes already have saved coordinates from the cloud, use a very low alpha (0.015) so the layout stays exactly as arranged
+      simulation.alpha(hasNewNodes ? 0.45 : 0.015).restart();
 
       simulation.on("tick", () => {
         linkSelection
@@ -1422,6 +1447,13 @@
           .attr("transform", d => `translate(${d.x}, ${d.y})`);
       });
 
+      simulation.on("end", () => {
+        // Persist settled positions if new nodes were just placed
+        if (hasNewNodes) {
+          saveState();
+        }
+      });
+
       updateHighlights();
       if (state.activeView === "stats") {
         renderStatsView();
@@ -1430,9 +1462,14 @@
       }
     }
 
-    // Drag handlers - subtle alphaTarget so other nodes don't scatter when moving one node
+    // Drag handlers - moving a node pins it in place and saves the arrangement to Supabase
+    let dragStartX = 0;
+    let dragStartY = 0;
+
     function dragstarted(event, d) {
-      if (!event.active) simulation.alphaTarget(0.05).restart();
+      if (!event.active) simulation.alphaTarget(0.04).restart();
+      dragStartX = event.x;
+      dragStartY = event.y;
       d.fx = d.x;
       d.fy = d.y;
     }
@@ -1440,12 +1477,28 @@
     function dragged(event, d) {
       d.fx = event.x;
       d.fy = event.y;
+      d.x = event.x;
+      d.y = event.y;
     }
 
     function dragended(event, d) {
       if (!event.active) simulation.alphaTarget(0);
-      d.fx = null;
-      d.fy = null;
+      const movedDist = Math.hypot(event.x - dragStartX, event.y - dragStartY);
+      if (movedDist > 3) {
+        // User intentionally moved this node -> lock it at the exact position and save to cloud
+        d.x = event.x;
+        d.y = event.y;
+        d.fx = event.x;
+        d.fy = event.y;
+        d.pinned = true;
+        saveState();
+        if (state.selectedNodeId === d.id) {
+          renderMovieDetails(d);
+        }
+      } else if (!d.pinned) {
+        d.fx = null;
+        d.fy = null;
+      }
     }
 
     // Selection & Highlighting
@@ -1562,18 +1615,28 @@
             </div>
           </div>
 
-          <!-- Watched Status Button -->
-          <button id="toggleWatchedBtn" class="w-full py-2.5 px-4 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
-            isWatched 
-              ? 'bg-emerald-600/20 text-emerald-300 border border-emerald-500/50 hover:bg-emerald-600/30' 
-              : 'bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-750 hover:text-white'
-          }">
-            <svg class="w-4 h-4 ${isWatched ? 'text-emerald-400' : 'text-slate-400'}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-            </svg>
-            <span>${isWatched ? '✓ Película Vista' : 'Marcar como Vista'}</span>
-          </button>
+          <!-- Watched & Position Pin Buttons -->
+          <div class="flex gap-2">
+            <button id="toggleWatchedBtn" class="flex-1 py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${
+              isWatched 
+                ? 'bg-emerald-600/20 text-emerald-300 border border-emerald-500/50 hover:bg-emerald-600/30' 
+                : 'bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-750 hover:text-white'
+            }">
+              <svg class="w-4 h-4 ${isWatched ? 'text-emerald-400' : 'text-slate-400'}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+              <span>${isWatched ? '✓ Película Vista' : 'Marcar como Vista'}</span>
+            </button>
+
+            <button id="togglePinNodeBtn" class="py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${
+              movie.pinned
+                ? 'bg-cyan-950/80 text-cyan-300 border border-cyan-700/70 hover:bg-cyan-900/60'
+                : 'bg-slate-800 text-slate-400 border border-slate-700 hover:text-white'
+            }" title="${movie.pinned ? 'Posición fijada manualmente (clic para soltar)' : 'Fijar posición actual en el mapa'}">
+              <span>${movie.pinned ? '📌 Fijada' : '📌 Fijar'}</span>
+            </button>
+          </div>
 
           <!-- Personal Rating Section (1 to 100) -->
           <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-3 space-y-2">
@@ -1687,6 +1750,24 @@
         toggleWatchedMovie(movie.id);
         renderMovieDetails(movie);
       });
+
+      // Bind toggle pin position action
+      const pinBtn = document.getElementById("togglePinNodeBtn");
+      if (pinBtn) {
+        pinBtn.addEventListener("click", () => {
+          if (movie.pinned) {
+            movie.pinned = false;
+            movie.fx = null;
+            movie.fy = null;
+          } else {
+            movie.pinned = true;
+            movie.fx = movie.x;
+            movie.fy = movie.y;
+          }
+          saveState();
+          renderMovieDetails(movie);
+        });
+      }
 
       // Bind personal score slider & number input (1 to 100)
       const sliderEl = document.getElementById("movieScoreSlider");
@@ -2581,7 +2662,14 @@
       }
 
       document.getElementById("reheatSimulationBtn").addEventListener("click", () => {
-        simulation.alpha(0.8).restart();
+        // Unpin all nodes so the physics simulation can reorganize the whole graph cleanly
+        state.movies.forEach(m => {
+          m.pinned = false;
+          m.fx = null;
+          m.fy = null;
+        });
+        simulation.alpha(0.65).restart();
+        setTimeout(() => saveState(), 1800);
       });
 
       // In-Graph Quick Search
