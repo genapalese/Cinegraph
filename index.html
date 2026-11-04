@@ -56,19 +56,25 @@
         <p class="text-[11px] text-slate-400 hidden lg:block">Grafo interactivo de películas y estadísticas personales</p>
       </div>
 
-      <!-- Main Section Tabs (Grafo vs Estadísticas/Rankings) -->
+      <!-- Main Section Tabs (Grafo / Top & Rankings / Top Películas) -->
       <div class="flex items-center bg-slate-800/90 rounded-xl p-0.5 border border-slate-700/70 text-xs ml-2 sm:ml-4">
-        <button id="viewGraphTabBtn" class="px-3 py-1.5 rounded-lg text-white font-semibold bg-cyan-600 shadow-sm flex items-center gap-1.5 transition-all">
+        <button id="viewGraphTabBtn" class="px-2.5 sm:px-3 py-1.5 rounded-lg text-white font-semibold bg-cyan-600 shadow-sm flex items-center gap-1.5 transition-all">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
           </svg>
           <span>Grafo</span>
         </button>
-        <button id="viewStatsTabBtn" class="px-3 py-1.5 rounded-lg text-slate-300 hover:text-white font-medium flex items-center gap-1.5 transition-all">
+        <button id="viewStatsTabBtn" class="px-2.5 sm:px-3 py-1.5 rounded-lg text-slate-300 hover:text-white font-medium flex items-center gap-1.5 transition-all">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
           </svg>
           <span>Top & Rankings</span>
+        </button>
+        <button id="viewMoviesRankTabBtn" class="px-2.5 sm:px-3 py-1.5 rounded-lg text-slate-300 hover:text-white font-medium flex items-center gap-1.5 transition-all">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+          </svg>
+          <span>Top Películas</span>
         </button>
       </div>
     </div>
@@ -81,8 +87,8 @@
         <span id="cloudSyncText">Conectando nube...</span>
       </button>
 
-      <!-- Profile Switcher -->
-      <div class="flex items-center bg-slate-800/80 rounded-lg p-0.5 border border-slate-700/60 text-xs">
+      <!-- Profile Switcher (Hidden - Single Personal User Mode) -->
+      <div class="hidden">
         <label for="profileSelect" class="sr-only">Perfil activo</label>
         <div class="pl-2 pr-1 text-slate-400 flex items-center">
           <svg class="w-3.5 h-3.5 mr-1 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -229,9 +235,9 @@
           <div>
             <span class="text-[10px] font-bold uppercase tracking-wider text-cyan-400 bg-cyan-950/80 px-2.5 py-0.5 rounded border border-cyan-800">Estadísticas Personales</span>
             <h2 class="text-xl font-bold text-white mt-1 flex items-center gap-2">
-              Rankings y Recuento de <span id="statsProfileName" class="text-cyan-400">Mi Chart Personal</span>
+              Rankings y Recuento <span id="statsProfileName" class="hidden"></span>
             </h2>
-            <p class="text-xs text-slate-400 mt-0.5">Calculado sobre las películas marcadas como vistas y tus puntajes personales (1 a 100)</p>
+            <p class="text-xs text-slate-400 mt-0.5">Calculado sobre las películas que viste y tus puntajes personales (1 a 100)</p>
           </div>
           <div class="flex items-center gap-3">
             <div class="bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-center">
@@ -296,7 +302,7 @@
                   </svg>
                   <span id="topCountTitle">Top por Cantidad de Películas Vistas</span>
                 </h3>
-                <p class="text-[11px] text-slate-400">Ordenado por total de películas vistas en este perfil</p>
+                <p class="text-[11px] text-slate-400">Ordenado por total de películas vistas</p>
               </div>
               <span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-slate-800 text-slate-300">Recuento</span>
             </div>
@@ -325,6 +331,43 @@
           </div>
 
         </div>
+      </div>
+    </section>
+
+    <!-- 3rd SECTION: TOP PELÍCULAS POR PUNTUACIÓN (Generic Movie Ranking) -->
+    <section id="moviesRankViewSection" class="absolute inset-0 z-30 bg-slate-950 overflow-y-auto hidden select-text">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+        
+        <!-- Header Card -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl">
+          <div>
+            <span class="text-[10px] font-bold uppercase tracking-wider text-amber-400 bg-amber-950/80 px-2.5 py-0.5 rounded border border-amber-800/60">Ranking General</span>
+            <h2 class="text-xl font-bold text-white mt-1">Top de Películas por Puntuación</h2>
+            <p class="text-xs text-slate-400 mt-0.5">De mayor a menor puntaje personal (1 a 100). En caso de empate, se ordenan alfabéticamente.</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-center">
+              <div class="text-[10px] uppercase font-bold text-slate-400">Puntuadas</div>
+              <div id="moviesRankTotalRated" class="text-lg font-bold text-amber-400">0</div>
+            </div>
+            <div class="bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-center">
+              <div class="text-[10px] uppercase font-bold text-slate-400">Promedio</div>
+              <div id="moviesRankAvgScore" class="text-lg font-bold text-cyan-400">-</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ranked Movies List Container -->
+        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+          <div class="px-5 py-3.5 border-b border-slate-800 flex items-center justify-between bg-slate-900">
+            <span class="text-xs font-bold text-slate-300 uppercase tracking-wider">Posición y Película</span>
+            <span class="text-xs font-bold text-slate-300 uppercase tracking-wider">Mi Puntaje</span>
+          </div>
+          <div id="moviesRankList" class="divide-y divide-slate-800/60">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -1023,12 +1066,17 @@
           }
         }
       });
-      if (state.profiles) {
-        Object.keys(state.profiles).forEach(k => {
-          if (!state.profiles[k].watched) state.profiles[k].watched = [];
-          if (!state.profiles[k].ratings) state.profiles[k].ratings = {};
-        });
+      // Single-user mode: consolidate any watched/ratings into the primary personal data ("p1")
+      if (!state.profiles) {
+        state.profiles = { p1: { name: "Personal", watched: [], ratings: {} } };
       }
+      if (!state.profiles.p1) {
+        const firstKey = Object.keys(state.profiles)[0];
+        state.profiles.p1 = firstKey ? state.profiles[firstKey] : { name: "Personal", watched: [], ratings: {} };
+      }
+      if (!state.profiles.p1.watched) state.profiles.p1.watched = [];
+      if (!state.profiles.p1.ratings) state.profiles.p1.ratings = {};
+      state.currentProfile = "p1";
     }
 
     // --- 3. GRAPH EDGES & SIMULATION ENGINE ---
@@ -1377,6 +1425,8 @@
       updateHighlights();
       if (state.activeView === "stats") {
         renderStatsView();
+      } else if (state.activeView === "moviesRank") {
+        renderMoviesRankView();
       }
     }
 
@@ -1522,7 +1572,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
             </svg>
-            <span>${isWatched ? '✓ Película Vista por ' + profile.name : 'Marcar como Vista'}</span>
+            <span>${isWatched ? '✓ Película Vista' : 'Marcar como Vista'}</span>
           </button>
 
           <!-- Personal Rating Section (1 to 100) -->
@@ -1666,6 +1716,7 @@
           delete profile.ratings[movie.id];
           saveState();
           if (state.activeView === "stats") renderStatsView();
+          if (state.activeView === "moviesRank") renderMoviesRankView();
           renderMovieDetails(movie);
         });
       }
@@ -2186,12 +2237,10 @@
       if (byCount.length === 0) {
         countContainer.innerHTML = `<div class="p-6 text-center text-xs text-slate-400">No hay películas vistas registradas para esta categoría todavía.</div>`;
       } else {
-        const maxCount = byCount[0].count || 1;
-        countContainer.innerHTML = byCount.slice(0, 30).map((item, idx) => {
-          const pct = Math.max(8, Math.round((item.count / maxCount) * 100));
+        countContainer.innerHTML = byCount.slice(0, 50).map((item, idx) => {
           const moviesList = item.movies.map(m => m.score !== undefined ? `${m.title} (${m.score})` : m.title).join(" • ");
           return `
-            <div class="pt-2.5 first:pt-0">
+            <div class="py-2.5 first:pt-0 last:pb-0">
               <div class="flex items-center justify-between text-xs mb-1">
                 <div class="flex items-center gap-2 min-w-0 pr-2">
                   <span class="w-5 h-5 rounded-md bg-slate-800 text-slate-400 font-mono text-[10px] flex items-center justify-center shrink-0">${idx + 1}</span>
@@ -2204,10 +2253,7 @@
                   </span>
                 </div>
               </div>
-              <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden mb-1">
-                <div class="h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full" style="width: ${pct}%"></div>
-              </div>
-              <p class="text-[10px] text-slate-400 truncate" title="${moviesList}">${moviesList}</p>
+              <p class="text-[10px] text-slate-400 truncate pl-7" title="${moviesList}">${moviesList}</p>
             </div>
           `;
         }).join("");
@@ -2245,6 +2291,107 @@
           `;
         }).join("");
       }
+    }
+
+
+    // --- 5C. GENERIC TOP MOVIES BY RATING ENGINE ---
+    function renderMoviesRankView() {
+      const profile = state.profiles[state.currentProfile];
+      if (!profile) return;
+      if (!profile.ratings) profile.ratings = {};
+
+      const watchedIds = new Set(profile.watched || []);
+      const ratedMovies = [];
+      const unratedWatchedMovies = [];
+
+      state.movies.forEach(m => {
+        const rawScore = profile.ratings[m.id];
+        const hasScore = typeof rawScore === "number" && !isNaN(rawScore);
+        if (hasScore) {
+          ratedMovies.push({ ...m, score: rawScore });
+        } else if (watchedIds.has(m.id)) {
+          unratedWatchedMovies.push({ ...m, score: null });
+        }
+      });
+
+      // Sort rated movies: highest to lowest score, alphabetical tie-breaker by title
+      ratedMovies.sort((a, b) => {
+        if (b.score !== a.score) return b.score - a.score;
+        return (a.title || "").localeCompare(b.title || "", "en", { sensitivity: "base" });
+      });
+
+      // Sort unrated watched movies alphabetically at the bottom
+      unratedWatchedMovies.sort((a, b) => (a.title || "").localeCompare(b.title || "", "en", { sensitivity: "base" }));
+
+      const totalRated = ratedMovies.length;
+      const sumScores = ratedMovies.reduce((acc, m) => acc + m.score, 0);
+      const avgScore = totalRated > 0 ? (sumScores / totalRated).toFixed(1).replace(".0", "") : "-";
+
+      document.getElementById("moviesRankTotalRated").textContent = totalRated;
+      document.getElementById("moviesRankAvgScore").textContent = avgScore;
+
+      const listEl = document.getElementById("moviesRankList");
+      const allToDisplay = [...ratedMovies, ...unratedWatchedMovies];
+
+      if (allToDisplay.length === 0) {
+        listEl.innerHTML = `<div class="p-8 text-center text-xs text-slate-400">Todavía no hay películas puntuadas. Selecciona cualquier película en el grafo y asígnale tu puntaje de 1 a 100.</div>`;
+        return;
+      }
+
+      listEl.innerHTML = allToDisplay.map((m, idx) => {
+        const hasScore = m.score !== null;
+        const pct = hasScore ? Math.max(5, Math.round(m.score)) : 0;
+        const badgeColor = !hasScore
+          ? "bg-slate-800 text-slate-400 border-slate-700"
+          : m.score >= 90
+            ? "bg-amber-950/90 text-amber-300 border-amber-600/70"
+            : m.score >= 75
+              ? "bg-cyan-950/90 text-cyan-300 border-cyan-700/70"
+              : "bg-slate-800 text-slate-200 border-slate-700";
+
+        return `
+          <div class="p-3.5 sm:px-5 hover:bg-slate-800/40 transition flex items-center justify-between gap-4 cursor-pointer movie-rank-row" data-movie-id="${m.id}">
+            <div class="flex items-center gap-3.5 min-w-0 flex-1">
+              <span class="w-7 h-7 rounded-lg ${hasScore && idx < 3 ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold' : 'bg-slate-800 text-slate-400 font-mono'} text-xs flex items-center justify-center shrink-0">
+                ${hasScore ? idx + 1 : '-'}
+              </span>
+              <img src="${m.poster}" alt="${m.title}" class="w-10 h-14 object-cover rounded-lg border border-slate-700 bg-slate-800 shrink-0">
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-2">
+                  <h4 class="text-sm font-bold text-white truncate">${m.title}</h4>
+                  <span class="text-[11px] text-slate-400 shrink-0">(${m.year || 'N/A'})</span>
+                </div>
+                <p class="text-[11px] text-slate-400 truncate mt-0.5">
+                  Dir: <span class="text-slate-300">${m.director || 'N/A'}</span>
+                  ${m.dop && m.dop !== 'No especificado' ? ` • Foto: <span class="text-slate-300">${m.dop}</span>` : ''}
+                </p>
+                ${hasScore ? `
+                  <div class="w-full max-w-xs h-1.5 bg-slate-800 rounded-full overflow-hidden mt-1.5">
+                    <div class="h-full bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full" style="width: ${pct}%"></div>
+                  </div>
+                ` : ''}
+              </div>
+            </div>
+
+            <div class="shrink-0 text-right">
+              <span class="inline-flex items-center gap-1 px-3 py-1 rounded-xl border text-sm font-extrabold ${badgeColor}">
+                ${hasScore ? `★ ${m.score}` : 'Sin nota'}
+              </span>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      // Clicking a movie in the ranking opens its details in the graph or side panel
+      listEl.querySelectorAll(".movie-rank-row").forEach(row => {
+        row.addEventListener("click", () => {
+          const mId = row.getAttribute("data-movie-id");
+          const movieObj = state.movies.find(x => x.id === mId);
+          if (movieObj) {
+            selectNode(movieObj);
+          }
+        });
+      });
     }
 
     // --- 6. EVENT LISTENERS & UI SETUP ---
@@ -2333,24 +2480,43 @@
       bindCheckbox("filterComposer", "composer");
       bindCheckbox("filterYear", "year");
 
-      // Main View Tabs (Grafo vs Top & Rankings)
+      // Main View Tabs (Grafo / Top & Rankings / Top Películas)
       const viewGraphTabBtn = document.getElementById("viewGraphTabBtn");
       const viewStatsTabBtn = document.getElementById("viewStatsTabBtn");
+      const viewMoviesRankTabBtn = document.getElementById("viewMoviesRankTabBtn");
       const statsViewSection = document.getElementById("statsViewSection");
+      const moviesRankViewSection = document.getElementById("moviesRankViewSection");
+
+      const activeTabClass = "px-2.5 sm:px-3 py-1.5 rounded-lg text-white font-semibold bg-cyan-600 shadow-sm flex items-center gap-1.5 transition-all";
+      const inactiveTabClass = "px-2.5 sm:px-3 py-1.5 rounded-lg text-slate-300 hover:text-white font-medium flex items-center gap-1.5 transition-all";
 
       viewGraphTabBtn.addEventListener("click", () => {
         state.activeView = "graph";
         statsViewSection.classList.add("hidden");
-        viewGraphTabBtn.className = "px-3 py-1.5 rounded-lg text-white font-semibold bg-cyan-600 shadow-sm flex items-center gap-1.5 transition-all";
-        viewStatsTabBtn.className = "px-3 py-1.5 rounded-lg text-slate-300 hover:text-white font-medium flex items-center gap-1.5 transition-all";
+        moviesRankViewSection.classList.add("hidden");
+        viewGraphTabBtn.className = activeTabClass;
+        viewStatsTabBtn.className = inactiveTabClass;
+        viewMoviesRankTabBtn.className = inactiveTabClass;
       });
 
       viewStatsTabBtn.addEventListener("click", () => {
         state.activeView = "stats";
         renderStatsView();
         statsViewSection.classList.remove("hidden");
-        viewStatsTabBtn.className = "px-3 py-1.5 rounded-lg text-white font-semibold bg-cyan-600 shadow-sm flex items-center gap-1.5 transition-all";
-        viewGraphTabBtn.className = "px-3 py-1.5 rounded-lg text-slate-300 hover:text-white font-medium flex items-center gap-1.5 transition-all";
+        moviesRankViewSection.classList.add("hidden");
+        viewStatsTabBtn.className = activeTabClass;
+        viewGraphTabBtn.className = inactiveTabClass;
+        viewMoviesRankTabBtn.className = inactiveTabClass;
+      });
+
+      viewMoviesRankTabBtn.addEventListener("click", () => {
+        state.activeView = "moviesRank";
+        renderMoviesRankView();
+        moviesRankViewSection.classList.remove("hidden");
+        statsViewSection.classList.add("hidden");
+        viewMoviesRankTabBtn.className = activeTabClass;
+        viewGraphTabBtn.className = inactiveTabClass;
+        viewStatsTabBtn.className = inactiveTabClass;
       });
 
       // Stats Category Pills
