@@ -158,28 +158,40 @@
           </svg>
           <span>Top Películas</span>
         </button>
+        <button id="viewInsightsTabBtn" class="px-2.5 sm:px-3 py-1.5 rounded-lg text-slate-300 hover:text-white font-medium flex items-center justify-center gap-1.5 transition-all">
+          <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
+          </svg>
+          <span>Métricas</span>
+        </button>
       </div>
     </div>
 
-    <!-- Mobile Row 2: 3 Section Tabs (Only visible on <768px) -->
-    <div class="grid grid-cols-3 md:hidden bg-slate-800/90 rounded-xl p-0.5 border border-slate-700/70 text-[11px] w-full">
-      <button id="mobileViewGraphTabBtn" class="py-1.5 px-2 rounded-lg text-white font-semibold bg-cyan-600 shadow-sm flex items-center justify-center gap-1 transition-all">
+    <!-- Mobile Row 2: 4 Section Tabs (Only visible on <768px) -->
+    <div class="grid grid-cols-4 md:hidden bg-slate-800/90 rounded-xl p-0.5 border border-slate-700/70 text-[11px] w-full">
+      <button id="mobileViewGraphTabBtn" class="py-1.5 px-1.5 rounded-lg text-white font-semibold bg-cyan-600 shadow-sm flex items-center justify-center gap-1 transition-all">
         <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
         </svg>
         <span class="truncate">Grafo</span>
       </button>
-      <button id="mobileViewStatsTabBtn" class="py-1.5 px-2 rounded-lg text-slate-300 hover:text-white font-medium flex items-center justify-center gap-1 transition-all">
+      <button id="mobileViewStatsTabBtn" class="py-1.5 px-1.5 rounded-lg text-slate-300 hover:text-white font-medium flex items-center justify-center gap-1 transition-all">
         <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
         </svg>
         <span class="truncate">Rankings</span>
       </button>
-      <button id="mobileViewMoviesRankTabBtn" class="py-1.5 px-2 rounded-lg text-slate-300 hover:text-white font-medium flex items-center justify-center gap-1 transition-all">
+      <button id="mobileViewMoviesRankTabBtn" class="py-1.5 px-1.5 rounded-lg text-slate-300 hover:text-white font-medium flex items-center justify-center gap-1 transition-all">
         <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
         </svg>
         <span class="truncate">Top Pelis</span>
+      </button>
+      <button id="mobileViewInsightsTabBtn" class="py-1.5 px-1.5 rounded-lg text-slate-300 hover:text-white font-medium flex items-center justify-center gap-1 transition-all">
+        <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
+        </svg>
+        <span class="truncate">Métricas</span>
       </button>
     </div>
 
@@ -471,6 +483,174 @@
           </div>
           <div id="moviesRankList" class="divide-y divide-slate-800/60">
             <!-- Dynamically populated -->
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 4th SECTION: MÉTRICAS & ANALÍTICA AVANZADA (Duplas, Distribución, Epicentro KPI, Décadas, Evolución Directores) -->
+    <section id="insightsViewSection" class="absolute inset-0 z-30 bg-slate-950 overflow-y-auto hidden select-text">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 py-6 space-y-6 pb-16">
+
+        <!-- TOP ROW: Header + Power BI KPI Card for "Película Epicentro" (Point 3) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
+          <!-- Section Title Card (7 cols on lg) -->
+          <div class="lg:col-span-7 bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl flex flex-col justify-center">
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-wider text-cyan-400 bg-cyan-950/80 px-2.5 py-0.5 rounded border border-cyan-800">Analítica Cinematográfica</span>
+              <h2 class="text-xl font-bold text-white mt-1.5">Métricas, Duplas y Evolución</h2>
+              <p class="text-xs text-slate-400 mt-1">Análisis estadístico de tus colaboraciones más vistas, distribución de notas, décadas y trayectoria de directores.</p>
+            </div>
+          </div>
+
+          <!-- Point 3: Compact Power BI KPI Card - Película Epicentro (5 cols on lg) -->
+          <div id="epicenterKpiCard" class="lg:col-span-5 bg-gradient-to-br from-slate-900 via-slate-900 to-cyan-950/30 border border-slate-800 hover:border-cyan-700/60 rounded-2xl p-4 shadow-xl flex items-center justify-between gap-3.5 transition cursor-pointer" title="Clic para ver detalles de la película epicentro">
+            <!-- Populated dynamically by renderInsightsView() -->
+          </div>
+        </div>
+
+        <!-- MIDDLE ROW: Point 1 (Duplas Ranking) + Point 2 (Distribución de Notas Letterboxd Style) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+          <!-- Point 1: Ranking de Duplas Más Vistas (6 cols) -->
+          <div class="lg:col-span-6 bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden shadow-xl flex flex-col">
+            <div class="px-5 py-4 border-b border-slate-800 bg-slate-900 space-y-3">
+              <div class="flex items-center justify-between">
+                <div>
+                  <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                    <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <span>Top Duplas Más Vistas</span>
+                  </h3>
+                  <p class="text-[11px] text-slate-400">Ordenadas por recuento junto con su promedio de puntuación</p>
+                </div>
+                <span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-slate-800 text-slate-300">Duplas</span>
+              </div>
+
+              <!-- Pill Selector like Screenshot 1 -->
+              <div class="flex flex-wrap items-center gap-1.5 bg-slate-950/90 p-1.5 rounded-xl border border-slate-800/90" id="duoTypeTabs">
+                <button data-duo="dir_cast" class="duo-tab-btn px-2.5 py-1.5 rounded-lg text-[11px] font-semibold bg-cyan-600 text-white transition flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-amber-400"></span> Director + Actor
+                </button>
+                <button data-duo="dir_dop" class="duo-tab-btn px-2.5 py-1.5 rounded-lg text-[11px] font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-fuchsia-400"></span> Director + Fotografía
+                </button>
+                <button data-duo="dir_writer" class="duo-tab-btn px-2.5 py-1.5 rounded-lg text-[11px] font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Director + Guionista
+                </button>
+                <button data-duo="dir_composer" class="duo-tab-btn px-2.5 py-1.5 rounded-lg text-[11px] font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-rose-400"></span> Director + Compositor
+                </button>
+              </div>
+            </div>
+
+            <div id="duosListContainer" class="p-4 space-y-2.5 max-h-[420px] overflow-y-auto divide-y divide-slate-800/40">
+              <!-- Populated dynamically -->
+            </div>
+          </div>
+
+          <!-- Point 2: Distribución de Notas (Letterboxd Vertical Bars: 10 bars 1-9 to 90-100 + Mediana + Desviación) (6 cols) -->
+          <div class="lg:col-span-6 bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden shadow-xl flex flex-col">
+            <div class="px-5 py-4 border-b border-slate-800 bg-slate-900 flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                  <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                  <span>Distribución de Notas</span>
+                </h3>
+                <p class="text-[11px] text-slate-400">Frecuencia de calificaciones personales en 10 rangos (1 a 100)</p>
+              </div>
+
+              <!-- Mediana & Desviación Badges -->
+              <div class="flex items-center gap-2">
+                <div class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-center">
+                  <div class="text-[9px] uppercase font-bold text-slate-400">Mediana</div>
+                  <div id="distMedianVal" class="text-sm font-extrabold text-amber-400">-</div>
+                </div>
+                <div class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-center">
+                  <div class="text-[9px] uppercase font-bold text-slate-400">Desviación (σ)</div>
+                  <div id="distStdDevVal" class="text-sm font-extrabold text-cyan-400">-</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-5 flex-1 flex flex-col justify-between">
+              <div id="scoreDistributionChart" class="h-64 flex items-end justify-between gap-1.5 sm:gap-2.5 pt-8 pb-2 px-1 border-b border-slate-800 relative">
+                <!-- 10 vertical bars populated dynamically -->
+              </div>
+              <div id="scoreDistFooterInfo" class="mt-3 text-[11px] text-slate-400 flex items-center justify-between">
+                <span>Pasa el cursor o toca una barra para ver las películas del rango</span>
+                <span id="scoreDistTotalLabel" class="font-mono text-slate-300">0 puntuadas</span>
+              </div>
+              <div id="scoreDistBucketDetails" class="mt-2 min-h-[28px] bg-slate-950/70 border border-slate-800/80 rounded-xl px-3 py-2 text-xs text-slate-300 hidden"></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!--Point 4: Comparativa de Décadas (Barras Verticales Apiladas con Doble Escala) -->
+        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+          <div class="px-5 py-4 border-b border-slate-800 bg-slate-900 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span>Comparativa por Décadas (Visualizaciones y Promedio)</span>
+              </h3>
+              <p class="text-[11px] text-slate-400">Barras verticales apiladas de doble escala: Eje izquierdo (1-100) para Promedio de Puntuación y Eje derecho (1-Máx) para Cantidad de Películas Vistas</p>
+            </div>
+            <div class="flex items-center gap-4 text-xs shrink-0">
+              <span class="flex items-center gap-1.5 text-amber-400 font-semibold">
+                <span class="w-3 h-3 rounded-sm bg-amber-500 inline-block"></span> Promedio (Escala Izq. 1-100)
+              </span>
+              <span class="flex items-center gap-1.5 text-cyan-400 font-semibold">
+                <span class="w-3 h-3 rounded-sm bg-cyan-500 inline-block"></span> Vistas (Escala Der. 1-Máx)
+              </span>
+            </div>
+          </div>
+          <div class="p-4 sm:p-6">
+            <div id="decadesChartContainer" class="w-full h-80 relative">
+              <!-- Dual-scale stacked vertical bar chart SVG injected here -->
+            </div>
+            <div id="decadesHoverDetails" class="mt-3 bg-slate-950/70 border border-slate-800/80 rounded-xl px-3.5 py-2 text-xs text-slate-300 hidden"></div>
+          </div>
+        </div>
+
+        <!-- Point 5: Evolución Cronológica de Directores (Gráfico de Líneas XY con Filtro máx 5 directores) -->
+        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+          <div class="px-5 py-4 border-b border-slate-800 bg-slate-900 space-y-3">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                  <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
+                  </svg>
+                  <span>Evolución Cronológica de Directores</span>
+                </h3>
+                <p class="text-[11px] text-slate-400">Eje Y: Mi Puntaje (1-100) • Eje X: Año de estreno • Selecciona hasta 5 directores para comparar sus trayectorias</p>
+              </div>
+              <span id="directorSelectionCounter" class="text-[11px] font-mono px-2.5 py-1 rounded-lg bg-slate-950 text-cyan-400 border border-slate-800 shrink-0">0 / 5 seleccionados</span>
+            </div>
+
+            <!-- Director Selector Filter Chips -->
+            <div class="space-y-1.5">
+              <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Filtrar Directores (máx. 5 simultáneos):</div>
+              <div id="directorEvolutionFilterList" class="flex flex-wrap items-center gap-1.5 max-h-28 overflow-y-auto p-1.5 bg-slate-950/90 rounded-xl border border-slate-800">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+          </div>
+
+          <div class="p-4 sm:p-6 relative">
+            <div id="directorEvolutionChartContainer" class="w-full h-80 relative">
+              <!-- XY Line Chart SVG injected here -->
+            </div>
+            <!-- Floating Point Tooltip -->
+            <div id="xyChartTooltip" class="pointer-events-none absolute z-30 bg-slate-950/95 border border-slate-700 rounded-xl px-3.5 py-2.5 shadow-2xl text-xs text-white hidden max-w-xs"></div>
           </div>
         </div>
 
@@ -856,6 +1036,8 @@
       activeView: "graph",
       statsCategory: "director",
       statsMinRated: 1,
+      duoCategory: "dir_cast",
+      selectedEvolutionDirectors: [],
       selectedNodeId: null,
       selectedEdgeId: null,
       tmdbApiKey: ""
@@ -1575,6 +1757,8 @@
         renderStatsView();
       } else if (state.activeView === "moviesRank") {
         renderMoviesRankView();
+      } else if (state.activeView === "insights") {
+        renderInsightsView();
       }
     }
 
@@ -1919,6 +2103,7 @@
           saveState();
           if (state.activeView === "stats") renderStatsView();
           if (state.activeView === "moviesRank") renderMoviesRankView();
+          if (state.activeView === "insights") renderInsightsView();
           renderMovieDetails(movie);
         });
       }
@@ -2612,6 +2797,693 @@
       });
     }
 
+
+    // --- 5D. 4TH SECTION: MÉTRICAS & ANALÍTICA AVANZADA ENGINE ---
+    const DIRECTOR_LINE_COLORS = ["#38bdf8", "#f59e0b", "#34d399", "#e879f9", "#fb7185"];
+
+    function renderInsightsView() {
+      const profile = state.profiles[state.currentProfile];
+      if (!profile) return;
+      if (!profile.ratings) profile.ratings = {};
+
+      const watchedIds = new Set(profile.watched || []);
+      const watchedMovies = state.movies.filter(m => watchedIds.has(m.id));
+
+      renderEpicenterKpi(watchedMovies, profile);
+      renderDuosRanking(watchedMovies, profile);
+      renderScoreDistribution(watchedMovies, profile);
+      renderDecadesComparison(watchedMovies, profile);
+      renderDirectorEvolutionChart(watchedMovies, profile);
+    }
+
+    // POINT 3: Power BI KPI Card - Película Epicentro
+    function renderEpicenterKpi(watchedMovies, profile) {
+      const container = document.getElementById("epicenterKpiCard");
+      if (!container) return;
+
+      const pool = watchedMovies.length > 0 ? watchedMovies : state.movies;
+      if (pool.length === 0) {
+        container.innerHTML = `<div class="text-xs text-slate-400">Agrega películas para calcular la película epicentro de tu red.</div>`;
+        return;
+      }
+
+      const links = calculateLinks(pool);
+      const degreeMap = new Map();
+      const strengthMap = new Map();
+
+      pool.forEach(m => {
+        degreeMap.set(m.id, 0);
+        strengthMap.set(m.id, 0);
+      });
+
+      links.forEach(l => {
+        const sId = typeof l.source === "object" ? l.source.id : l.source;
+        const tId = typeof l.target === "object" ? l.target.id : l.target;
+        degreeMap.set(sId, (degreeMap.get(sId) || 0) + 1);
+        degreeMap.set(tId, (degreeMap.get(tId) || 0) + 1);
+        strengthMap.set(sId, (strengthMap.get(sId) || 0) + l.strength);
+        strengthMap.set(tId, (strengthMap.get(tId) || 0) + l.strength);
+      });
+
+      let bestMovie = pool[0];
+      let bestDegree = -1;
+      let bestStrength = -1;
+
+      pool.forEach(m => {
+        const deg = degreeMap.get(m.id) || 0;
+        const str = strengthMap.get(m.id) || 0;
+        if (deg > bestDegree || (deg === bestDegree && str > bestStrength)) {
+          bestMovie = m;
+          bestDegree = deg;
+          bestStrength = str;
+        }
+      });
+
+      const score = profile.ratings[bestMovie.id];
+      container.onclick = () => selectNode(bestMovie);
+
+      container.innerHTML = `
+        <div class="flex items-center gap-3.5 min-w-0">
+          <img src="${bestMovie.poster}" alt="${bestMovie.title}" class="w-12 h-16 object-cover rounded-xl border border-cyan-500/50 shadow-md shrink-0 bg-slate-800">
+          <div class="min-w-0">
+            <div class="flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+              <span class="text-[10px] font-bold uppercase tracking-wider text-cyan-400">KPI • Película Epicentro</span>
+            </div>
+            <h3 class="text-sm sm:text-base font-extrabold text-white truncate mt-0.5" title="${bestMovie.title}">${bestMovie.title} <span class="text-xs font-normal text-slate-400">(${bestMovie.year || 'N/A'})</span></h3>
+            <p class="text-[11px] text-slate-400 truncate">Dir: ${bestMovie.director || 'N/A'}${score !== undefined ? ` • ★ ${score}/100` : ''}</p>
+          </div>
+        </div>
+        <div class="shrink-0 text-right bg-slate-950/90 border border-slate-800 rounded-xl px-3.5 py-2">
+          <div class="text-xl sm:text-2xl font-black text-cyan-400 leading-none">${bestDegree}</div>
+          <div class="text-[9px] uppercase font-bold text-slate-400 mt-1">pelis conectadas</div>
+          <div class="text-[10px] text-amber-400/90 font-mono mt-0.5">${bestStrength} vínculos</div>
+        </div>
+      `;
+    }
+
+    // POINT 1: Rankear las duplas que más vi (Director+Actor, Director+Fotografía, Director+Guionista, Director+Compositor)
+    function renderDuosRanking(watchedMovies, profile) {
+      const container = document.getElementById("duosListContainer");
+      if (!container) return;
+
+      const duoType = state.duoCategory || "dir_cast";
+      const isInvalid = (val) => !val || ["desconocido", "no especificado", "varios / sin compositor original", "n/a"].includes(String(val).trim().toLowerCase());
+
+      const duosMap = new Map();
+
+      watchedMovies.forEach(m => {
+        if (isInvalid(m.director)) return;
+        const directors = m.director.split(",").map(s => s.trim()).filter(s => !isInvalid(s));
+
+        let partners = [];
+        if (duoType === "dir_cast" && Array.isArray(m.cast)) {
+          partners = m.cast.map(s => s.trim()).filter(s => !isInvalid(s));
+        } else if (duoType === "dir_dop" && !isInvalid(m.dop)) {
+          partners = m.dop.split(",").map(s => s.trim()).filter(s => !isInvalid(s));
+        } else if (duoType === "dir_writer" && Array.isArray(m.writers)) {
+          partners = m.writers.map(s => s.trim()).filter(s => !isInvalid(s));
+        } else if (duoType === "dir_composer" && !isInvalid(m.composer)) {
+          partners = m.composer.split(",").map(s => s.trim()).filter(s => !isInvalid(s));
+        }
+
+        const uniquePartners = [...new Set(partners)];
+        directors.forEach(dir => {
+          uniquePartners.forEach(part => {
+            // Avoid pairing a person with themselves (e.g. when the director is also listed as screenwriter)
+            if (dir.toLowerCase() === part.toLowerCase()) return;
+            const key = `${dir}___${part}`;
+            if (!duosMap.has(key)) {
+              duosMap.set(key, {
+                director: dir,
+                partner: part,
+                label: `${dir} + ${part}`,
+                count: 0,
+                ratedCount: 0,
+                ratingSum: 0,
+                movies: []
+              });
+            }
+            const entry = duosMap.get(key);
+            entry.count++;
+            const sc = profile.ratings[m.id];
+            if (typeof sc === "number" && !isNaN(sc)) {
+              entry.ratedCount++;
+              entry.ratingSum += sc;
+            }
+            entry.movies.push({ title: m.title, year: m.year, score: sc });
+          });
+        });
+      });
+
+      const duosList = Array.from(duosMap.values()).map(d => ({
+        ...d,
+        avgScore: d.ratedCount > 0 ? (d.ratingSum / d.ratedCount) : null
+      }));
+
+      // Sort by recuento descending, tie-break by avgScore descending, then alphabetical
+      duosList.sort((a, b) => {
+        if (b.count !== a.count) return b.count - a.count;
+        if ((b.avgScore || 0) !== (a.avgScore || 0)) return (b.avgScore || 0) - (a.avgScore || 0);
+        return a.label.localeCompare(b.label, "es", { sensitivity: "base" });
+      });
+
+      if (duosList.length === 0) {
+        container.innerHTML = `<div class="p-6 text-center text-xs text-slate-400">No hay duplas registradas en tus películas vistas para esta combinación todavía.</div>`;
+        return;
+      }
+
+      container.innerHTML = duosList.slice(0, 40).map((item, idx) => {
+        const avgText = item.avgScore !== null
+          ? (Number.isInteger(item.avgScore) ? item.avgScore : item.avgScore.toFixed(1).replace(".", ","))
+          : "-";
+        const moviesStr = item.movies.map(m => m.score !== undefined ? `${m.title} (${m.score})` : m.title).join(" • ");
+
+        return `
+          <div class="py-2.5 first:pt-0 last:pb-0">
+            <div class="flex items-center justify-between text-xs mb-1 gap-2">
+              <div class="flex items-center gap-2 min-w-0">
+                <span class="w-5 h-5 rounded-md bg-slate-800 text-slate-400 font-mono text-[10px] flex items-center justify-center shrink-0">${idx + 1}</span>
+                <div class="truncate">
+                  <span class="font-bold text-white">${item.director}</span>
+                  <span class="text-cyan-400 font-bold mx-1">+</span>
+                  <span class="font-semibold text-slate-200">${item.partner}</span>
+                </div>
+              </div>
+              <div class="flex items-center gap-2 shrink-0">
+                <span class="px-2 py-0.5 rounded-md bg-amber-950/80 text-amber-300 border border-amber-700/50 font-bold text-[11px]">
+                  Prom: ★ ${avgText}
+                </span>
+                <span class="px-2 py-0.5 rounded-md bg-cyan-950 text-cyan-300 border border-cyan-800/60 font-bold text-xs">
+                  ${item.count} ${item.count === 1 ? 'peli' : 'pelis'}
+                </span>
+              </div>
+            </div>
+            <p class="text-[10px] text-slate-400 truncate pl-7" title="${moviesStr}">${moviesStr}</p>
+          </div>
+        `;
+      }).join("");
+    }
+
+    // POINT 2: Distribución de Notas (10 vertical bars: 1-9, 10-20, 20-30, ..., 90-100 + Mediana + Desviación)
+    function renderScoreDistribution(watchedMovies, profile) {
+      const chartEl = document.getElementById("scoreDistributionChart");
+      const medianEl = document.getElementById("distMedianVal");
+      const stdDevEl = document.getElementById("distStdDevVal");
+      const totalLabelEl = document.getElementById("scoreDistTotalLabel");
+      const detailBox = document.getElementById("scoreDistBucketDetails");
+      if (!chartEl) return;
+
+      const buckets = [
+        { label: "1-9", min: 1, max: 9, movies: [] },
+        { label: "10-20", min: 10, max: 19, movies: [] },
+        { label: "20-30", min: 20, max: 29, movies: [] },
+        { label: "30-40", min: 30, max: 39, movies: [] },
+        { label: "40-50", min: 40, max: 49, movies: [] },
+        { label: "50-60", min: 50, max: 59, movies: [] },
+        { label: "60-70", min: 60, max: 69, movies: [] },
+        { label: "70-80", min: 70, max: 79, movies: [] },
+        { label: "80-90", min: 80, max: 89, movies: [] },
+        { label: "90-100", min: 90, max: 100, movies: [] }
+      ];
+
+      const scores = [];
+      state.movies.forEach(m => {
+        const s = profile.ratings[m.id];
+        if (typeof s === "number" && !isNaN(s) && s >= 1 && s <= 100) {
+          scores.push(s);
+          const bIdx = s === 100 ? 9 : Math.floor(s / 10);
+          if (buckets[bIdx]) {
+            buckets[bIdx].movies.push({ title: m.title, score: s });
+          }
+        }
+      });
+
+      totalLabelEl.textContent = `${scores.length} ${scores.length === 1 ? 'puntuada' : 'puntuadas'}`;
+
+      if (scores.length === 0) {
+        medianEl.textContent = "-";
+        stdDevEl.textContent = "-";
+      } else {
+        const sorted = [...scores].sort((a, b) => a - b);
+        const mid = Math.floor(sorted.length / 2);
+        const median = sorted.length % 2 !== 0
+          ? sorted[mid]
+          : (sorted[mid - 1] + sorted[mid]) / 2;
+
+        const mean = scores.reduce((a, b) => a + b, 0) / scores.length;
+        const variance = scores.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / scores.length;
+        const stdDev = Math.sqrt(variance);
+
+        medianEl.textContent = Number.isInteger(median) ? String(median) : median.toFixed(1).replace(".", ",");
+        stdDevEl.textContent = stdDev.toFixed(1).replace(".", ",");
+      }
+
+      const maxBucketCount = Math.max(1, ...buckets.map(b => b.movies.length));
+
+      chartEl.innerHTML = buckets.map((b, i) => {
+        const count = b.movies.length;
+        const heightPct = count > 0 ? Math.max(8, Math.round((count / maxBucketCount) * 100)) : 2;
+        const barColor = count > 0
+          ? "bg-gradient-to-t from-emerald-600 to-cyan-400 hover:from-amber-500 hover:to-yellow-300"
+          : "bg-slate-800/70";
+
+        return `
+          <div class="score-bucket-col flex-1 flex flex-col items-center justify-end h-full group cursor-pointer select-none" data-bucket-idx="${i}">
+            <span class="text-[10px] font-mono font-bold ${count > 0 ? 'text-slate-200 group-hover:text-amber-300' : 'text-slate-600'} mb-1 transition">${count}</span>
+            <div class="w-full max-w-[34px] rounded-t-md transition-all duration-300 ${barColor}" style="height: ${heightPct}%"></div>
+            <span class="text-[9px] sm:text-[10px] font-mono text-slate-400 group-hover:text-white mt-2 whitespace-nowrap">${b.label}</span>
+          </div>
+        `;
+      }).join("");
+
+      const showBucketInfo = (idx) => {
+        const b = buckets[idx];
+        if (!b || !detailBox) return;
+        detailBox.classList.remove("hidden");
+        if (b.movies.length === 0) {
+          detailBox.innerHTML = `<span class="font-bold text-cyan-400">Rango ${b.label}:</span> Sin películas en este rango.`;
+        } else {
+          const listStr = b.movies
+            .sort((a, c) => c.score - a.score)
+            .map(m => `<span class="text-white font-medium">${m.title}</span> <span class="text-amber-400">(${m.score})</span>`)
+            .join(" • ");
+          detailBox.innerHTML = `<span class="font-bold text-cyan-400">Rango ${b.label} (${b.movies.length}):</span> ${listStr}`;
+        }
+      };
+
+      chartEl.querySelectorAll(".score-bucket-col").forEach(col => {
+        const idx = parseInt(col.getAttribute("data-bucket-idx"));
+        col.addEventListener("mouseenter", () => showBucketInfo(idx));
+        col.addEventListener("click", () => showBucketInfo(idx));
+      });
+    }
+
+    // POINT 4: Comparativa de Décadas (Gráfico de Barras Verticales Apiladas con Doble Escala: Izq 1-100 Promedio, Der 1-Máx Recuento)
+    function renderDecadesComparison(watchedMovies, profile) {
+      const container = document.getElementById("decadesChartContainer");
+      const detailEl = document.getElementById("decadesHoverDetails");
+      if (!container) return;
+
+      const decadesMap = new Map();
+      watchedMovies.forEach(m => {
+        if (!m.year || isNaN(m.year)) return;
+        const decStart = Math.floor(parseInt(m.year) / 10) * 10;
+        const shortLabel = decStart >= 2000 ? `${String(decStart).slice(2)}s` : `${String(decStart).slice(2)}s`;
+        const fullLabel = `${decStart}s`;
+        if (!decadesMap.has(decStart)) {
+          decadesMap.set(decStart, {
+            decade: decStart,
+            label: shortLabel,
+            fullLabel: fullLabel,
+            count: 0,
+            ratedCount: 0,
+            ratingSum: 0,
+            movies: []
+          });
+        }
+        const dObj = decadesMap.get(decStart);
+        dObj.count++;
+        const sc = profile.ratings[m.id];
+        if (typeof sc === "number" && !isNaN(sc)) {
+          dObj.ratedCount++;
+          dObj.ratingSum += sc;
+        }
+        dObj.movies.push({ title: m.title, year: m.year, score: sc });
+      });
+
+      const decadesList = Array.from(decadesMap.values())
+        .sort((a, b) => a.decade - b.decade)
+        .map(d => ({
+          ...d,
+          avgScore: d.ratedCount > 0 ? (d.ratingSum / d.ratedCount) : 0
+        }));
+
+      if (decadesList.length === 0) {
+        container.innerHTML = `<div class="h-full flex items-center justify-center text-xs text-slate-400">Marca películas como vistas para visualizar la comparativa por décadas.</div>`;
+        return;
+      }
+
+      const maxCount = Math.max(1, ...decadesList.map(d => d.count));
+
+      const width = container.clientWidth || 760;
+      const height = container.clientHeight || 300;
+      const margin = { top: 28, right: 54, bottom: 38, left: 50 };
+      const innerW = Math.max(200, width - margin.left - margin.right);
+      const innerH = Math.max(140, height - margin.top - margin.bottom);
+
+      // Each stacked bar has 2 vertical blocks:
+      // Bottom block: Cantidad de Visualizaciones (normalized to 50% of chart height at maxCount, matching Right Axis 1..maxCount)
+      // Top stacked block: Promedio de la Década (normalized to 50% of chart height at 100 points, matching Left Axis 1..100)
+      // And we render both full-height reference scales on Left (1..100) and Right (1..maxCount) so every bar is directly readable!
+      const bandWidth = innerW / decadesList.length;
+      const barWidth = Math.min(54, Math.max(20, bandWidth * 0.52));
+
+      let svgHtml = `
+        <svg viewBox="0 0 ${width} ${height}" class="w-full h-full overflow-visible">
+          <!-- Horizontal Grid Lines -->
+          ${[0, 0.25, 0.5, 0.75, 1].map(pct => {
+            const y = margin.top + innerH * (1 - pct);
+            const leftVal = pct === 0 ? 1 : Math.round(pct * 100);
+            const rightVal = pct === 0 ? 1 : Math.max(1, Math.round(pct * maxCount));
+            return `
+              <line x1="${margin.left}" y1="${y}" x2="${width - margin.right}" y2="${y}" stroke="#1e293b" stroke-dasharray="3,3" stroke-width="1" />
+              <text x="${margin.left - 8}" y="${y + 4}" text-anchor="end" fill="#fbbf24" font-size="10" font-family="monospace" font-weight="bold">${leftVal}</text>
+              <text x="${width - margin.right + 8}" y="${y + 4}" text-anchor="start" fill="#38bdf8" font-size="10" font-family="monospace" font-weight="bold">${rightVal}</text>
+            `;
+          }).join("")}
+
+          <!-- Axis Titles -->
+          <text x="${margin.left - 10}" y="${margin.top - 12}" text-anchor="start" fill="#fbbf24" font-size="10" font-weight="bold">Puntaje (1-100)</text>
+          <text x="${width - margin.right + 10}" y="${margin.top - 12}" text-anchor="end" fill="#38bdf8" font-size="10" font-weight="bold">Vistas (1-${maxCount})</text>
+
+          <!-- Baseline -->
+          <line x1="${margin.left}" y1="${margin.top + innerH}" x2="${width - margin.right}" y2="${margin.top + innerH}" stroke="#334155" stroke-width="1.5" />
+
+          <!-- Stacked Vertical Bars per Decade -->
+          ${decadesList.map((d, i) => {
+            const cx = margin.left + bandWidth * i + bandWidth / 2;
+            const x = cx - barWidth / 2;
+
+            // Normalized ratios (0..1) on their respective scales:
+            const countRatio = d.count / maxCount; // 0..1 on Right Axis (1..maxCount)
+            const avgRatio = d.avgScore / 100;     // 0..1 on Left Axis (1..100)
+
+            // Stacked heights: each segment occupies up to 50% of innerH so the stacked total never exceeds 100% of innerH,
+            // while clearly stacking Cantidad de Visualizaciones (bottom cyan segment) + Promedio de la Década (top amber segment)
+            const hCount = Math.max(6, countRatio * (innerH * 0.48));
+            const hAvg = d.avgScore > 0 ? Math.max(6, avgRatio * (innerH * 0.48)) : 0;
+
+            const yCount = margin.top + innerH - hCount;
+            const yAvg = yCount - hAvg - (hAvg > 0 ? 2 : 0);
+
+            const avgFormatted = d.avgScore > 0 ? (Number.isInteger(d.avgScore) ? d.avgScore : d.avgScore.toFixed(1).replace(".", ",")) : "-";
+
+            return `
+              <g class="decade-bar-group cursor-pointer" data-dec-idx="${i}">
+                <!-- Bottom Stacked Bar: Cantidad de Visualizaciones (Cyan) -->
+                <rect x="${x}" y="${yCount}" width="${barWidth}" height="${hCount}" rx="4" fill="#06b6d4" fill-opacity="0.88" stroke="#22d3ee" stroke-width="1" />
+                <text x="${cx}" y="${yCount + Math.min(14, hCount / 2 + 4)}" text-anchor="middle" fill="#020617" font-size="10" font-weight="800">${d.count}v</text>
+
+                <!-- Top Stacked Bar: Promedio de Puntuación (Amber) -->
+                ${hAvg > 0 ? `
+                  <rect x="${x}" y="${yAvg}" width="${barWidth}" height="${hAvg}" rx="4" fill="#f59e0b" fill-opacity="0.92" stroke="#fbbf24" stroke-width="1" />
+                  <text x="${cx}" y="${yAvg - 6}" text-anchor="middle" fill="#fbbf24" font-size="10" font-weight="bold">★${avgFormatted}</text>
+                ` : `
+                  <text x="${cx}" y="${yCount - 6}" text-anchor="middle" fill="#94a3b8" font-size="9">Sin nota</text>
+                `}
+
+                <!-- X-Axis Decade Label (70s, 80s, 90s...) -->
+                <text x="${cx}" y="${margin.top + innerH + 18}" text-anchor="middle" fill="#f8fafc" font-size="11" font-weight="bold">${d.label}</text>
+                <text x="${cx}" y="${margin.top + innerH + 30}" text-anchor="middle" fill="#64748b" font-size="9">${d.fullLabel}</text>
+              </g>
+            `;
+          }).join("")}
+        </svg>
+      `;
+
+      container.innerHTML = svgHtml;
+
+      const showDecadeDetails = (idx) => {
+        const d = decadesList[idx];
+        if (!d || !detailEl) return;
+        detailEl.classList.remove("hidden");
+        const avgStr = d.avgScore > 0 ? d.avgScore.toFixed(1).replace(".", ",") : "Sin calificar";
+        const mList = d.movies.map(m => m.score !== undefined ? `${m.title} (${m.year}, ★${m.score})` : `${m.title} (${m.year})`).join(" • ");
+        detailEl.innerHTML = `<span class="font-bold text-cyan-400">Década ${d.label} (${d.fullLabel}):</span> <span class="text-white font-semibold">${d.count} ${d.count === 1 ? 'película vista' : 'películas vistas'}</span> • <span class="text-amber-400 font-semibold">Promedio: ★ ${avgStr}</span> — ${mList}`;
+      };
+
+      container.querySelectorAll(".decade-bar-group").forEach(g => {
+        const idx = parseInt(g.getAttribute("data-dec-idx"));
+        g.addEventListener("mouseenter", () => showDecadeDetails(idx));
+        g.addEventListener("click", () => showDecadeDetails(idx));
+      });
+    }
+
+    // POINT 5: Evolución Cronológica de los Directores (Gráfico de Líneas XY con filtro máx. 5 directores)
+    function renderDirectorEvolutionChart(watchedMovies, profile) {
+      const filterContainer = document.getElementById("directorEvolutionFilterList");
+      const chartContainer = document.getElementById("directorEvolutionChartContainer");
+      const counterEl = document.getElementById("directorSelectionCounter");
+      const tooltipEl = document.getElementById("xyChartTooltip");
+      if (!filterContainer || !chartContainer) return;
+
+      const isInvalid = (val) => !val || ["desconocido", "no especificado", "n/a"].includes(String(val).trim().toLowerCase());
+
+      // Collect all directors that have at least 1 rated movie
+      const directorMoviesMap = new Map();
+      state.movies.forEach(m => {
+        const sc = profile.ratings[m.id];
+        if (typeof sc !== "number" || isNaN(sc) || !m.year || isInvalid(m.director)) return;
+        m.director.split(",").map(s => s.trim()).filter(s => !isInvalid(s)).forEach(dir => {
+          if (!directorMoviesMap.has(dir)) {
+            directorMoviesMap.set(dir, []);
+          }
+          directorMoviesMap.get(dir).push({ title: m.title, year: parseInt(m.year), score: sc });
+        });
+      });
+
+      const allDirectors = Array.from(directorMoviesMap.entries())
+        .map(([name, movies]) => ({
+          name,
+          movies,
+          count: movies.length
+        }))
+        .sort((a, b) => {
+          if (b.count !== a.count) return b.count - a.count;
+          return a.name.localeCompare(b.name, "es", { sensitivity: "base" });
+        });
+
+      if (allDirectors.length === 0) {
+        filterContainer.innerHTML = `<span class="text-xs text-slate-400 px-2 py-1">Puntúa películas para habilitar el filtro de directores.</span>`;
+        chartContainer.innerHTML = `<div class="h-full flex items-center justify-center text-xs text-slate-400">Asigna puntajes a tus películas para graficar la evolución cronológica de los directores.</div>`;
+        if (counterEl) counterEl.textContent = "0 / 5 seleccionados";
+        return;
+      }
+
+      // Initialize default selected directors (up to 5) if empty or invalid
+      const validNames = new Set(allDirectors.map(d => d.name));
+      state.selectedEvolutionDirectors = (state.selectedEvolutionDirectors || []).filter(d => validNames.has(d));
+      if (state.selectedEvolutionDirectors.length === 0) {
+        state.selectedEvolutionDirectors = allDirectors.slice(0, 5).map(d => d.name);
+      } else if (state.selectedEvolutionDirectors.length > 5) {
+        state.selectedEvolutionDirectors = state.selectedEvolutionDirectors.slice(0, 5);
+      }
+
+      if (counterEl) {
+        counterEl.textContent = `${state.selectedEvolutionDirectors.length} / 5 seleccionados`;
+      }
+
+      // Render Director Filter Chips
+      filterContainer.innerHTML = allDirectors.map(d => {
+        const selIdx = state.selectedEvolutionDirectors.indexOf(d.name);
+        const isSelected = selIdx !== -1;
+        const color = isSelected ? DIRECTOR_LINE_COLORS[selIdx % DIRECTOR_LINE_COLORS.length] : "#64748b";
+        return `
+          <button data-dir-name="${d.name.replace(/"/g, '&quot;')}" class="dir-evo-chip px-2.5 py-1 rounded-lg text-[11px] font-medium transition flex items-center gap-1.5 border ${
+            isSelected
+              ? 'bg-slate-800 text-white border-cyan-500/80 shadow-sm'
+              : 'bg-slate-900/70 text-slate-400 border-slate-800 hover:text-slate-200 hover:border-slate-700'
+          }">
+            <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: ${color}"></span>
+            <span>${d.name}</span>
+            <span class="text-[10px] font-mono text-slate-400">(${d.count})</span>
+          </button>
+        `;
+      }).join("");
+
+      filterContainer.querySelectorAll(".dir-evo-chip").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const dirName = btn.getAttribute("data-dir-name");
+          const idx = state.selectedEvolutionDirectors.indexOf(dirName);
+          if (idx !== -1) {
+            state.selectedEvolutionDirectors.splice(idx, 1);
+          } else {
+            if (state.selectedEvolutionDirectors.length >= 5) {
+              // Replace oldest or ignore? Let's show a subtle flash on counter and keep max 5
+              if (counterEl) {
+                counterEl.textContent = "Máximo 5 directores a la vez";
+                counterEl.classList.add("text-rose-400");
+                setTimeout(() => {
+                  counterEl.classList.remove("text-rose-400");
+                  counterEl.textContent = `${state.selectedEvolutionDirectors.length} / 5 seleccionados`;
+                }, 1400);
+              }
+              return;
+            }
+            state.selectedEvolutionDirectors.push(dirName);
+          }
+          renderDirectorEvolutionChart(watchedMovies, profile);
+        });
+      });
+
+      if (state.selectedEvolutionDirectors.length === 0) {
+        chartContainer.innerHTML = `<div class="h-full flex items-center justify-center text-xs text-slate-400">Selecciona al menos 1 director arriba para ver su línea de evolución.</div>`;
+        return;
+      }
+
+      // Build chronological series per selected director (grouping same-year movies by average score)
+      const seriesList = [];
+      let minYear = Infinity;
+      let maxYear = -Infinity;
+
+      state.selectedEvolutionDirectors.forEach((dirName, sIdx) => {
+        const rawMovies = directorMoviesMap.get(dirName) || [];
+        const byYearMap = new Map();
+        rawMovies.forEach(m => {
+          if (!byYearMap.has(m.year)) {
+            byYearMap.set(m.year, []);
+          }
+          byYearMap.get(m.year).push(m);
+          if (m.year < minYear) minYear = m.year;
+          if (m.year > maxYear) maxYear = m.year;
+        });
+
+        const points = Array.from(byYearMap.entries())
+          .sort((a, b) => a[0] - b[0])
+          .map(([year, moviesInYear]) => {
+            const sum = moviesInYear.reduce((acc, x) => acc + x.score, 0);
+            const avg = sum / moviesInYear.length;
+            return {
+              director: dirName,
+              year: year,
+              avgScore: avg,
+              movies: moviesInYear,
+              color: DIRECTOR_LINE_COLORS[sIdx % DIRECTOR_LINE_COLORS.length]
+            };
+          });
+
+        seriesList.push({
+          director: dirName,
+          color: DIRECTOR_LINE_COLORS[sIdx % DIRECTOR_LINE_COLORS.length],
+          points: points
+        });
+      });
+
+      if (minYear === Infinity) minYear = 2000;
+      if (maxYear === -Infinity) maxYear = 2025;
+      if (minYear === maxYear) {
+        minYear -= 2;
+        maxYear += 2;
+      }
+
+      const width = chartContainer.clientWidth || 760;
+      const height = chartContainer.clientHeight || 300;
+      const margin = { top: 20, right: 30, bottom: 38, left: 46 };
+      const innerW = Math.max(200, width - margin.left - margin.right);
+      const innerH = Math.max(140, height - margin.top - margin.bottom);
+
+      const xScale = (yr) => margin.left + ((yr - minYear) / Math.max(1, maxYear - minYear)) * innerW;
+      const yScale = (sc) => margin.top + innerH - ((sc - 1) / 99) * innerH;
+
+      // Generate X-axis year ticks (up to 8 evenly spaced years)
+      const yearSpan = maxYear - minYear;
+      const tickCount = Math.min(8, yearSpan + 1);
+      const xTicks = [];
+      for (let i = 0; i < tickCount; i++) {
+        const yr = Math.round(minYear + (yearSpan * i) / Math.max(1, tickCount - 1));
+        if (!xTicks.includes(yr)) xTicks.push(yr);
+      }
+
+      const allPointsFlat = [];
+      seriesList.forEach(s => {
+        s.points.forEach(pt => allPointsFlat.push(pt));
+      });
+
+      const svgHtml = `
+        <svg viewBox="0 0 ${width} ${height}" class="w-full h-full overflow-visible">
+          <!-- Y-Axis Gridlines (1 to 100) -->
+          ${[1, 25, 50, 75, 100].map(val => {
+            const y = yScale(val);
+            return `
+              <line x1="${margin.left}" y1="${y}" x2="${width - margin.right}" y2="${y}" stroke="#1e293b" stroke-dasharray="3,3" stroke-width="1" />
+              <text x="${margin.left - 8}" y="${y + 4}" text-anchor="end" fill="#94a3b8" font-size="10" font-family="monospace">${val}</text>
+            `;
+          }).join("")}
+
+          <!-- X-Axis Year Ticks -->
+          <line x1="${margin.left}" y1="${margin.top + innerH}" x2="${width - margin.right}" y2="${margin.top + innerH}" stroke="#334155" stroke-width="1.5" />
+          ${xTicks.map(yr => {
+            const x = xScale(yr);
+            return `
+              <line x1="${x}" y1="${margin.top}" x2="${x}" y2="${margin.top + innerH}" stroke="#0f172a" stroke-width="1" />
+              <text x="${x}" y="${margin.top + innerH + 20}" text-anchor="middle" fill="#cbd5e1" font-size="10" font-family="monospace">${yr}</text>
+            `;
+          }).join("")}
+
+          <!-- Lines per Director -->
+          ${seriesList.map(s => {
+            if (s.points.length < 2) return "";
+            const pathD = s.points.map((pt, idx) => `${idx === 0 ? 'M' : 'L'} ${xScale(pt.year)} ${yScale(pt.avgScore)}`).join(" ");
+            return `<path d="${pathD}" fill="none" stroke="${s.color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.9" />`;
+          }).join("")}
+
+          <!-- Interactive Data Points -->
+          ${allPointsFlat.map((pt, idx) => {
+            const cx = xScale(pt.year);
+            const cy = yScale(pt.avgScore);
+            return `
+              <g class="xy-point-group cursor-pointer" data-pt-idx="${idx}">
+                <circle cx="${cx}" cy="${cy}" r="11" fill="transparent" />
+                <circle cx="${cx}" cy="${cy}" r="5.5" fill="#090d16" stroke="${pt.color}" stroke-width="2.5" class="transition-transform duration-150 hover:scale-125" />
+                ${pt.movies.length > 1 ? `<circle cx="${cx}" cy="${cy}" r="2" fill="${pt.color}" />` : ''}
+              </g>
+            `;
+          }).join("")}
+        </svg>
+      `;
+
+      chartContainer.innerHTML = svgHtml;
+
+      // Bind hover / click tooltips for each point
+      chartContainer.querySelectorAll(".xy-point-group").forEach(g => {
+        const idx = parseInt(g.getAttribute("data-pt-idx"));
+        const pt = allPointsFlat[idx];
+        if (!pt || !tooltipEl) return;
+
+        const showTooltip = () => {
+          const avgDisp = Number.isInteger(pt.avgScore) ? pt.avgScore : pt.avgScore.toFixed(1).replace(".", ",");
+          const moviesHtml = pt.movies.map(m => `
+            <div class="flex items-center justify-between gap-3 text-[11px] pt-1">
+              <span class="text-slate-200 font-medium truncate">${m.title}</span>
+              <span class="text-amber-400 font-bold shrink-0">★ ${m.score}</span>
+            </div>
+          `).join("");
+
+          tooltipEl.innerHTML = `
+            <div class="flex items-center justify-between gap-3 border-b border-slate-800 pb-1.5 mb-1">
+              <span class="font-bold text-white flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full" style="background-color: ${pt.color}"></span>
+                ${pt.director}
+              </span>
+              <span class="px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800 font-mono text-[10px] font-bold">Año ${pt.year}</span>
+            </div>
+            ${pt.movies.length > 1 ? `<div class="text-[10px] text-amber-300 font-semibold mb-1">Promedio del año: ★ ${avgDisp} (${pt.movies.length} películas)</div>` : ''}
+            <div class="divide-y divide-slate-800/60 space-y-1">
+              ${moviesHtml}
+            </div>
+          `;
+          tooltipEl.classList.remove("hidden");
+
+          const cx = xScale(pt.year);
+          const cy = yScale(pt.avgScore);
+          const leftPos = Math.min(Math.max(12, cx - 90), Math.max(12, width - 240));
+          const topPos = Math.max(10, cy - 85);
+          tooltipEl.style.left = `${leftPos}px`;
+          tooltipEl.style.top = `${topPos}px`;
+        };
+
+        g.addEventListener("mouseenter", showTooltip);
+        g.addEventListener("click", (e) => {
+          e.stopPropagation();
+          showTooltip();
+        });
+        g.addEventListener("mouseleave", () => {
+          tooltipEl.classList.add("hidden");
+        });
+      });
+    }
+
     // --- 6. EVENT LISTENERS & UI SETUP ---
     document.addEventListener("DOMContentLoaded", () => {
       applyTitleFixes();
@@ -2720,67 +3592,67 @@
       bindCheckbox("filterComposer", "composer");
       bindCheckbox("filterYear", "year");
 
-      // Main View Tabs (Grafo / Top & Rankings / Top Películas - Desktop & Mobile synced)
+      // Main View Tabs (Grafo / Top & Rankings / Top Películas / Métricas - Desktop & Mobile synced)
       const viewGraphTabBtn = document.getElementById("viewGraphTabBtn");
       const viewStatsTabBtn = document.getElementById("viewStatsTabBtn");
       const viewMoviesRankTabBtn = document.getElementById("viewMoviesRankTabBtn");
+      const viewInsightsTabBtn = document.getElementById("viewInsightsTabBtn");
       const mobileViewGraphTabBtn = document.getElementById("mobileViewGraphTabBtn");
       const mobileViewStatsTabBtn = document.getElementById("mobileViewStatsTabBtn");
       const mobileViewMoviesRankTabBtn = document.getElementById("mobileViewMoviesRankTabBtn");
+      const mobileViewInsightsTabBtn = document.getElementById("mobileViewInsightsTabBtn");
       const statsViewSection = document.getElementById("statsViewSection");
       const moviesRankViewSection = document.getElementById("moviesRankViewSection");
+      const insightsViewSection = document.getElementById("insightsViewSection");
 
       const activeTabClass = "px-2.5 sm:px-3 py-1.5 rounded-lg text-white font-semibold bg-cyan-600 shadow-sm flex items-center justify-center gap-1.5 transition-all";
       const inactiveTabClass = "px-2.5 sm:px-3 py-1.5 rounded-lg text-slate-300 hover:text-white font-medium flex items-center justify-center gap-1.5 transition-all";
-      const mobileActiveTabClass = "py-1.5 px-2 rounded-lg text-white font-semibold bg-cyan-600 shadow-sm flex items-center justify-center gap-1 transition-all";
-      const mobileInactiveTabClass = "py-1.5 px-2 rounded-lg text-slate-300 hover:text-white font-medium flex items-center justify-center gap-1 transition-all";
+      const mobileActiveTabClass = "py-1.5 px-1.5 rounded-lg text-white font-semibold bg-cyan-600 shadow-sm flex items-center justify-center gap-1 transition-all";
+      const mobileInactiveTabClass = "py-1.5 px-1.5 rounded-lg text-slate-300 hover:text-white font-medium flex items-center justify-center gap-1 transition-all";
 
       const switchMainView = (viewName) => {
         state.activeView = viewName;
-        if (viewName === "graph") {
-          statsViewSection.classList.add("hidden");
-          moviesRankViewSection.classList.add("hidden");
-          viewGraphTabBtn.className = activeTabClass;
-          viewStatsTabBtn.className = inactiveTabClass;
-          viewMoviesRankTabBtn.className = inactiveTabClass;
-          if (mobileViewGraphTabBtn) {
-            mobileViewGraphTabBtn.className = mobileActiveTabClass;
-            mobileViewStatsTabBtn.className = mobileInactiveTabClass;
-            mobileViewMoviesRankTabBtn.className = mobileInactiveTabClass;
-          }
-        } else if (viewName === "stats") {
-          renderStatsView();
-          statsViewSection.classList.remove("hidden");
-          moviesRankViewSection.classList.add("hidden");
-          viewStatsTabBtn.className = activeTabClass;
-          viewGraphTabBtn.className = inactiveTabClass;
-          viewMoviesRankTabBtn.className = inactiveTabClass;
-          if (mobileViewStatsTabBtn) {
-            mobileViewStatsTabBtn.className = mobileActiveTabClass;
-            mobileViewGraphTabBtn.className = mobileInactiveTabClass;
-            mobileViewMoviesRankTabBtn.className = mobileInactiveTabClass;
-          }
-        } else if (viewName === "moviesRank") {
-          renderMoviesRankView();
-          moviesRankViewSection.classList.remove("hidden");
-          statsViewSection.classList.add("hidden");
-          viewMoviesRankTabBtn.className = activeTabClass;
-          viewGraphTabBtn.className = inactiveTabClass;
-          viewStatsTabBtn.className = inactiveTabClass;
-          if (mobileViewMoviesRankTabBtn) {
-            mobileViewMoviesRankTabBtn.className = mobileActiveTabClass;
-            mobileViewGraphTabBtn.className = mobileInactiveTabClass;
-            mobileViewStatsTabBtn.className = mobileInactiveTabClass;
-          }
+        statsViewSection.classList.toggle("hidden", viewName !== "stats");
+        moviesRankViewSection.classList.toggle("hidden", viewName !== "moviesRank");
+        insightsViewSection.classList.toggle("hidden", viewName !== "insights");
+
+        viewGraphTabBtn.className = viewName === "graph" ? activeTabClass : inactiveTabClass;
+        viewStatsTabBtn.className = viewName === "stats" ? activeTabClass : inactiveTabClass;
+        viewMoviesRankTabBtn.className = viewName === "moviesRank" ? activeTabClass : inactiveTabClass;
+        if (viewInsightsTabBtn) viewInsightsTabBtn.className = viewName === "insights" ? activeTabClass : inactiveTabClass;
+
+        if (mobileViewGraphTabBtn) {
+          mobileViewGraphTabBtn.className = viewName === "graph" ? mobileActiveTabClass : mobileInactiveTabClass;
+          mobileViewStatsTabBtn.className = viewName === "stats" ? mobileActiveTabClass : mobileInactiveTabClass;
+          mobileViewMoviesRankTabBtn.className = viewName === "moviesRank" ? mobileActiveTabClass : mobileInactiveTabClass;
+          if (mobileViewInsightsTabBtn) mobileViewInsightsTabBtn.className = viewName === "insights" ? mobileActiveTabClass : mobileInactiveTabClass;
         }
+
+        if (viewName === "stats") renderStatsView();
+        if (viewName === "moviesRank") renderMoviesRankView();
+        if (viewName === "insights") renderInsightsView();
       };
 
       viewGraphTabBtn.addEventListener("click", () => switchMainView("graph"));
       viewStatsTabBtn.addEventListener("click", () => switchMainView("stats"));
       viewMoviesRankTabBtn.addEventListener("click", () => switchMainView("moviesRank"));
+      if (viewInsightsTabBtn) viewInsightsTabBtn.addEventListener("click", () => switchMainView("insights"));
       if (mobileViewGraphTabBtn) mobileViewGraphTabBtn.addEventListener("click", () => switchMainView("graph"));
       if (mobileViewStatsTabBtn) mobileViewStatsTabBtn.addEventListener("click", () => switchMainView("stats"));
       if (mobileViewMoviesRankTabBtn) mobileViewMoviesRankTabBtn.addEventListener("click", () => switchMainView("moviesRank"));
+      if (mobileViewInsightsTabBtn) mobileViewInsightsTabBtn.addEventListener("click", () => switchMainView("insights"));
+
+      // Duo Type Selector Pills in 4th Section
+      document.querySelectorAll(".duo-tab-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          state.duoCategory = btn.getAttribute("data-duo");
+          document.querySelectorAll(".duo-tab-btn").forEach(b => {
+            b.className = "duo-tab-btn px-2.5 py-1.5 rounded-lg text-[11px] font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition flex items-center gap-1.5";
+          });
+          btn.className = "duo-tab-btn px-2.5 py-1.5 rounded-lg text-[11px] font-semibold bg-cyan-600 text-white transition flex items-center gap-1.5";
+          renderInsightsView();
+        });
+      });
 
       // Stats Category Pills
       document.querySelectorAll(".stats-cat-btn").forEach(btn => {
