@@ -601,7 +601,7 @@
                 </svg>
                 <span>Comparativa por Décadas (Visualizaciones y Promedio)</span>
               </h3>
-              <p class="text-[11px] text-slate-400">Barras verticales apiladas de doble escala: Eje izquierdo (1-100) para Promedio de Puntuación y Eje derecho (1-Máx) para Cantidad de Películas Vistas</p>
+              <p class="text-[11px] text-slate-400">Columnas agrupadas de doble escala: Eje izquierdo (0-100) para Promedio de Puntuación y Eje derecho (0-Máx) para Cantidad de Películas Vistas</p>
             </div>
             <div class="flex items-center gap-4 text-xs shrink-0">
               <span class="flex items-center gap-1.5 text-amber-400 font-semibold">
@@ -3132,20 +3132,19 @@
       const innerW = Math.max(200, width - margin.left - margin.right);
       const innerH = Math.max(140, height - margin.top - margin.bottom);
 
-      // Each stacked bar has 2 vertical blocks:
-      // Bottom block: Cantidad de Visualizaciones (normalized to 50% of chart height at maxCount, matching Right Axis 1..maxCount)
-      // Top stacked block: Promedio de la Década (normalized to 50% of chart height at 100 points, matching Left Axis 1..100)
-      // And we render both full-height reference scales on Left (1..100) and Right (1..maxCount) so every bar is directly readable!
+      // Grouped Columns (Side-by-Side) with Dual Y-Axis:
+      // Left Column (Amber): Promedio de la Década correlated 100% to Left Axis (0..100)
+      // Right Column (Cyan): Cantidad de Visualizaciones correlated 100% to Right Axis (0..maxCount)
       const bandWidth = innerW / decadesList.length;
-      const barWidth = Math.min(54, Math.max(20, bandWidth * 0.52));
+      const singleBarWidth = Math.min(34, Math.max(12, bandWidth * 0.32));
 
       let svgHtml = `
         <svg viewBox="0 0 ${width} ${height}" class="w-full h-full overflow-visible">
           <!-- Horizontal Grid Lines -->
           ${[0, 0.25, 0.5, 0.75, 1].map(pct => {
             const y = margin.top + innerH * (1 - pct);
-            const leftVal = pct === 0 ? 1 : Math.round(pct * 100);
-            const rightVal = pct === 0 ? 1 : Math.max(1, Math.round(pct * maxCount));
+            const leftVal = Math.round(pct * 100);
+            const rightVal = Number.isInteger(pct * maxCount) ? (pct * maxCount) : (pct * maxCount).toFixed(1).replace(".0", "");
             return `
               <line x1="${margin.left}" y1="${y}" x2="${width - margin.right}" y2="${y}" stroke="#1e293b" stroke-dasharray="3,3" stroke-width="1" />
               <text x="${margin.left - 8}" y="${y + 4}" text-anchor="end" fill="#fbbf24" font-size="10" font-family="monospace" font-weight="bold">${leftVal}</text>
@@ -3154,48 +3153,50 @@
           }).join("")}
 
           <!-- Axis Titles -->
-          <text x="${margin.left - 10}" y="${margin.top - 12}" text-anchor="start" fill="#fbbf24" font-size="10" font-weight="bold">Puntaje (1-100)</text>
-          <text x="${width - margin.right + 10}" y="${margin.top - 12}" text-anchor="end" fill="#38bdf8" font-size="10" font-weight="bold">Vistas (1-${maxCount})</text>
+          <text x="${margin.left - 10}" y="${margin.top - 12}" text-anchor="start" fill="#fbbf24" font-size="10" font-weight="bold">Puntaje (0-100)</text>
+          <text x="${width - margin.right + 10}" y="${margin.top - 12}" text-anchor="end" fill="#38bdf8" font-size="10" font-weight="bold">Vistas (0-${maxCount})</text>
 
           <!-- Baseline -->
           <line x1="${margin.left}" y1="${margin.top + innerH}" x2="${width - margin.right}" y2="${margin.top + innerH}" stroke="#334155" stroke-width="1.5" />
 
-          <!-- Stacked Vertical Bars per Decade -->
+          <!-- Grouped Side-by-Side Columns per Decade -->
           ${decadesList.map((d, i) => {
             const cx = margin.left + bandWidth * i + bandWidth / 2;
-            const x = cx - barWidth / 2;
+            const baselineY = margin.top + innerH;
 
-            // Normalized ratios (0..1) on their respective scales:
-            const countRatio = d.count / maxCount; // 0..1 on Right Axis (1..maxCount)
-            const avgRatio = d.avgScore / 100;     // 0..1 on Left Axis (1..100)
+            // Exact 1:1 correlation with Left Axis (0..100) and Right Axis (0..maxCount)
+            const avgRatio = Math.max(0, Math.min(1, d.avgScore / 100));
+            const countRatio = Math.max(0, Math.min(1, d.count / maxCount));
 
-            // Stacked heights: each segment occupies up to 50% of innerH so the stacked total never exceeds 100% of innerH,
-            // while clearly stacking Cantidad de Visualizaciones (bottom cyan segment) + Promedio de la Década (top amber segment)
-            const hCount = Math.max(6, countRatio * (innerH * 0.48));
-            const hAvg = d.avgScore > 0 ? Math.max(6, avgRatio * (innerH * 0.48)) : 0;
+            const hAvg = d.avgScore > 0 ? Math.max(4, avgRatio * innerH) : 0;
+            const hCount = d.count > 0 ? Math.max(4, countRatio * innerH) : 0;
 
-            const yCount = margin.top + innerH - hCount;
-            const yAvg = yCount - hAvg - (hAvg > 0 ? 2 : 0);
+            const yAvg = baselineY - hAvg;
+            const yCount = baselineY - hCount;
+
+            // Left column: Average Score (Amber) | Right column: Watched Count (Cyan)
+            const xAvg = cx - singleBarWidth - 1;
+            const xCount = cx + 1;
 
             const avgFormatted = d.avgScore > 0 ? (Number.isInteger(d.avgScore) ? d.avgScore : d.avgScore.toFixed(1).replace(".", ",")) : "-";
 
             return `
               <g class="decade-bar-group cursor-pointer" data-dec-idx="${i}">
-                <!-- Bottom Stacked Bar: Cantidad de Visualizaciones (Cyan) -->
-                <rect x="${x}" y="${yCount}" width="${barWidth}" height="${hCount}" rx="4" fill="#06b6d4" fill-opacity="0.88" stroke="#22d3ee" stroke-width="1" />
-                <text x="${cx}" y="${yCount + Math.min(14, hCount / 2 + 4)}" text-anchor="middle" fill="#020617" font-size="10" font-weight="800">${d.count}v</text>
-
-                <!-- Top Stacked Bar: Promedio de Puntuación (Amber) -->
+                <!-- Left Column: Promedio de Puntuación (Amber - correlated to Left Axis 0-100) -->
                 ${hAvg > 0 ? `
-                  <rect x="${x}" y="${yAvg}" width="${barWidth}" height="${hAvg}" rx="4" fill="#f59e0b" fill-opacity="0.92" stroke="#fbbf24" stroke-width="1" />
-                  <text x="${cx}" y="${yAvg - 6}" text-anchor="middle" fill="#fbbf24" font-size="10" font-weight="bold">★${avgFormatted}</text>
+                  <rect x="${xAvg}" y="${yAvg}" width="${singleBarWidth}" height="${hAvg}" rx="3" fill="#f59e0b" fill-opacity="0.92" stroke="#fbbf24" stroke-width="1" />
+                  <text x="${xAvg + singleBarWidth / 2}" y="${yAvg - 6}" text-anchor="middle" fill="#fbbf24" font-size="10" font-weight="bold">★${avgFormatted}</text>
                 ` : `
-                  <text x="${cx}" y="${yCount - 6}" text-anchor="middle" fill="#94a3b8" font-size="9">Sin nota</text>
+                  <text x="${xAvg + singleBarWidth / 2}" y="${baselineY - 6}" text-anchor="middle" fill="#64748b" font-size="9">-</text>
                 `}
 
+                <!-- Right Column: Cantidad de Visualizaciones (Cyan - correlated to Right Axis 0-maxCount) -->
+                <rect x="${xCount}" y="${yCount}" width="${singleBarWidth}" height="${hCount}" rx="3" fill="#06b6d4" fill-opacity="0.9" stroke="#22d3ee" stroke-width="1" />
+                <text x="${xCount + singleBarWidth / 2}" y="${yCount - 6}" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="bold">${d.count}v</text>
+
                 <!-- X-Axis Decade Label (70s, 80s, 90s...) -->
-                <text x="${cx}" y="${margin.top + innerH + 18}" text-anchor="middle" fill="#f8fafc" font-size="11" font-weight="bold">${d.label}</text>
-                <text x="${cx}" y="${margin.top + innerH + 30}" text-anchor="middle" fill="#64748b" font-size="9">${d.fullLabel}</text>
+                <text x="${cx}" y="${baselineY + 18}" text-anchor="middle" fill="#f8fafc" font-size="11" font-weight="bold">${d.label}</text>
+                <text x="${cx}" y="${baselineY + 30}" text-anchor="middle" fill="#64748b" font-size="9">${d.fullLabel}</text>
               </g>
             `;
           }).join("")}
