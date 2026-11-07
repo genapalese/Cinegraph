@@ -1062,6 +1062,9 @@
         if (parsed.profiles) state.profiles = parsed.profiles;
         if (parsed.currentProfile) state.currentProfile = parsed.currentProfile;
         if (parsed.tmdbApiKey) state.tmdbApiKey = parsed.tmdbApiKey;
+        if (parsed.activeConnectionTypes && typeof parsed.activeConnectionTypes === "object") {
+          state.activeConnectionTypes = { ...state.activeConnectionTypes, ...parsed.activeConnectionTypes };
+        }
       }
     } catch(e) {
       console.warn("Storage access failed:", e);
@@ -1101,6 +1104,23 @@
           badge.className = "text-[10px] font-semibold px-2 py-0.5 rounded bg-rose-950 text-rose-400 border border-rose-800";
         }
       }
+    }
+
+    function syncConnectionFilterCheckboxes() {
+      const typeMap = {
+        director: "filterDirector",
+        cast: "filterCast",
+        dop: "filterDop",
+        writer: "filterWriter",
+        composer: "filterComposer",
+        year: "filterYear"
+      };
+      Object.keys(typeMap).forEach(key => {
+        const el = document.getElementById(typeMap[key]);
+        if (el) {
+          el.checked = Boolean(state.activeConnectionTypes[key]);
+        }
+      });
     }
 
     function rebuildProfileDropdown() {
@@ -1161,6 +1181,7 @@
         movies: cleanMovies,
         profiles: state.profiles,
         currentProfile: state.currentProfile,
+        activeConnectionTypes: state.activeConnectionTypes,
         tmdbApiKey: state.tmdbApiKey
       };
     }
@@ -1225,6 +1246,10 @@
           }
           if (cloudData.tmdbApiKey) {
             state.tmdbApiKey = cloudData.tmdbApiKey;
+          }
+          if (cloudData.activeConnectionTypes && typeof cloudData.activeConnectionTypes === "object") {
+            state.activeConnectionTypes = { ...state.activeConnectionTypes, ...cloudData.activeConnectionTypes };
+            syncConnectionFilterCheckboxes();
           }
 
           applyTitleFixes();
@@ -3488,6 +3513,7 @@
     // --- 6. EVENT LISTENERS & UI SETUP ---
     document.addEventListener("DOMContentLoaded", () => {
       applyTitleFixes();
+      syncConnectionFilterCheckboxes();
       rebuildProfileDropdown();
       initGraph();
       updateStats();
@@ -3579,12 +3605,17 @@
         document.getElementById("newProfileModal").classList.add("hidden");
       });
 
-      // Connection Filter Checkboxes
+      // Connection Filter Checkboxes (Persisted locally and to Supabase Cloud)
       const bindCheckbox = (id, prop) => {
-        document.getElementById(id).addEventListener("change", (e) => {
-          state.activeConnectionTypes[prop] = e.target.checked;
-          updateGraph();
-        });
+        const el = document.getElementById(id);
+        if (el) {
+          el.checked = Boolean(state.activeConnectionTypes[prop]);
+          el.addEventListener("change", (e) => {
+            state.activeConnectionTypes[prop] = e.target.checked;
+            saveState();
+            updateGraph();
+          });
+        }
       };
       bindCheckbox("filterDirector", "director");
       bindCheckbox("filterCast", "cast");
