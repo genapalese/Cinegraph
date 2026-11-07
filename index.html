@@ -164,34 +164,34 @@
           </svg>
           <span>Métricas</span>
         </button>
+        <button id="viewPostersTabBtn" class="px-2.5 sm:px-3 py-1.5 rounded-lg text-slate-300 hover:text-white font-medium flex items-center justify-center gap-1.5 transition-all">
+          <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+          </svg>
+          <span>Pósters</span>
+        </button>
       </div>
     </div>
 
-    <!-- Mobile Row 2: 4 Section Tabs (Only visible on <768px) -->
-    <div class="grid grid-cols-4 md:hidden bg-slate-800/90 rounded-xl p-0.5 border border-slate-700/70 text-[11px] w-full">
-      <button id="mobileViewGraphTabBtn" class="py-1.5 px-1.5 rounded-lg text-white font-semibold bg-cyan-600 shadow-sm flex items-center justify-center gap-1 transition-all">
-        <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <!-- Mobile Row 2: 5 Section Tabs (Only visible on <768px) -->
+    <div class="grid grid-cols-5 md:hidden bg-slate-800/90 rounded-xl p-0.5 border border-slate-700/70 text-[10.5px] w-full">
+      <button id="mobileViewGraphTabBtn" class="py-1.5 px-1 rounded-lg text-white font-semibold bg-cyan-600 shadow-sm flex items-center justify-center gap-1 transition-all">
+        <svg class="w-3 h-3 shrink-0 hidden sm:inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
         </svg>
         <span class="truncate">Grafo</span>
       </button>
-      <button id="mobileViewStatsTabBtn" class="py-1.5 px-1.5 rounded-lg text-slate-300 hover:text-white font-medium flex items-center justify-center gap-1 transition-all">
-        <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-        </svg>
+      <button id="mobileViewStatsTabBtn" class="py-1.5 px-1 rounded-lg text-slate-300 hover:text-white font-medium flex items-center justify-center gap-1 transition-all">
         <span class="truncate">Rankings</span>
       </button>
-      <button id="mobileViewMoviesRankTabBtn" class="py-1.5 px-1.5 rounded-lg text-slate-300 hover:text-white font-medium flex items-center justify-center gap-1 transition-all">
-        <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-        </svg>
+      <button id="mobileViewMoviesRankTabBtn" class="py-1.5 px-1 rounded-lg text-slate-300 hover:text-white font-medium flex items-center justify-center gap-1 transition-all">
         <span class="truncate">Top Pelis</span>
       </button>
-      <button id="mobileViewInsightsTabBtn" class="py-1.5 px-1.5 rounded-lg text-slate-300 hover:text-white font-medium flex items-center justify-center gap-1 transition-all">
-        <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
-        </svg>
+      <button id="mobileViewInsightsTabBtn" class="py-1.5 px-1 rounded-lg text-slate-300 hover:text-white font-medium flex items-center justify-center gap-1 transition-all">
         <span class="truncate">Métricas</span>
+      </button>
+      <button id="mobileViewPostersTabBtn" class="py-1.5 px-1 rounded-lg text-slate-300 hover:text-white font-medium flex items-center justify-center gap-1 transition-all">
+        <span class="truncate">Pósters</span>
       </button>
     </div>
 
@@ -657,6 +657,52 @@
       </div>
     </section>
 
+    <!-- 5th SECTION: MURO DE PÓSTERS (Single-page Poster Grid, Equal H/V Gap, Unwatched in B&W, Top Sorting Controls) -->
+    <section id="postersViewSection" class="absolute inset-0 z-30 bg-slate-950 overflow-y-auto hidden select-none">
+      <div class="max-w-[1600px] mx-auto px-4 sm:px-6 py-5 space-y-5 pb-16">
+
+        <!-- Top Sorting Bar (Only Ordering Controls, No Slicers) -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-900/90 border border-slate-800 rounded-2xl px-4 py-3 shadow-xl">
+          <div class="flex items-center gap-2.5">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Ordenar por:</span>
+            <div class="flex flex-wrap items-center gap-1.5" id="posterSortButtons">
+              <button data-sort="score_desc" class="poster-sort-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-cyan-600 text-white transition">
+                Puntaje (Mayor a menor)
+              </button>
+              <button data-sort="score_asc" class="poster-sort-btn px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition">
+                Puntaje (Menor a mayor)
+              </button>
+              <button data-sort="year_desc" class="poster-sort-btn px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition">
+                Año (Más recientes)
+              </button>
+              <button data-sort="year_asc" class="poster-sort-btn px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition">
+                Año (Más antiguas)
+              </button>
+              <button data-sort="title_asc" class="poster-sort-btn px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition">
+                Título (A - Z)
+              </button>
+              <button data-sort="title_desc" class="poster-sort-btn px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition">
+                Título (Z - A)
+              </button>
+              <button data-sort="added_desc" class="poster-sort-btn px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition">
+                Orden de carga
+              </button>
+            </div>
+          </div>
+
+          <div class="text-[11px] text-slate-400 font-mono shrink-0" id="postersCountLabel">
+            0 películas
+          </div>
+        </div>
+
+        <!-- Continuous Single-Page Poster Grid (Equal horizontal & vertical gap via gap-3) -->
+        <div id="postersWallGrid" class="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-3">
+          <!-- Populated dynamically -->
+        </div>
+
+      </div>
+    </section>
+
     <!-- RIGHT SIDEBAR / DETAILS DRAWER (z-40 so it displays over Graph, Rankings, and Top Películas) -->
     <aside id="detailsPanel" class="absolute top-0 right-0 bottom-0 w-full sm:w-96 bg-slate-900/98 md:bg-slate-900/95 md:backdrop-blur-md border-l border-slate-800 p-4 sm:p-5 z-40 flex flex-col shadow-2xl transition-transform duration-300 translate-x-full overflow-y-auto">
       <!-- Close drawer button (floating circular badge, crisp & visible over any poster) -->
@@ -1038,6 +1084,7 @@
       statsMinRated: 1,
       duoCategory: "dir_cast",
       selectedEvolutionDirectors: [],
+      posterSortBy: "score_desc",
       selectedNodeId: null,
       selectedEdgeId: null,
       tmdbApiKey: ""
@@ -1784,6 +1831,8 @@
         renderMoviesRankView();
       } else if (state.activeView === "insights") {
         renderInsightsView();
+      } else if (state.activeView === "posters") {
+        renderPostersView();
       }
     }
 
@@ -2129,6 +2178,7 @@
           if (state.activeView === "stats") renderStatsView();
           if (state.activeView === "moviesRank") renderMoviesRankView();
           if (state.activeView === "insights") renderInsightsView();
+          if (state.activeView === "posters") renderPostersView();
           renderMovieDetails(movie);
         });
       }
@@ -3510,6 +3560,97 @@
       });
     }
 
+
+    // --- 5E. 5TH SECTION: MURO DE PÓSTERS ENGINE ---
+    function renderPostersView() {
+      const gridEl = document.getElementById("postersWallGrid");
+      const countLabelEl = document.getElementById("postersCountLabel");
+      if (!gridEl) return;
+
+      const profile = state.profiles[state.currentProfile];
+      const watchedIds = new Set(profile?.watched || []);
+      const ratings = profile?.ratings || {};
+
+      // Respect top bar Todas / Solo Vistas if user activated it, otherwise show all loaded movies
+      const baseMovies = state.filterOnlyWatched
+        ? state.movies.filter(m => watchedIds.has(m.id))
+        : [...state.movies];
+
+      if (countLabelEl) {
+        countLabelEl.textContent = `${baseMovies.length} ${baseMovies.length === 1 ? 'película' : 'películas'}`;
+      }
+
+      if (baseMovies.length === 0) {
+        gridEl.innerHTML = `<div class="col-span-full py-16 text-center text-xs text-slate-400">No hay películas cargadas para mostrar en el muro de pósters.</div>`;
+        return;
+      }
+
+      const sortMode = state.posterSortBy || "score_desc";
+
+      // Sort movies according to selected ordering criterion (with alphabetical tie-breaker)
+      const sortedMovies = baseMovies.map((m, idx) => ({
+        movie: m,
+        addedIndex: idx,
+        isWatched: watchedIds.has(m.id),
+        score: typeof ratings[m.id] === "number" && !isNaN(ratings[m.id]) ? ratings[m.id] : null
+      }));
+
+      sortedMovies.sort((a, b) => {
+        if (sortMode === "score_desc") {
+          // Rated movies first (highest to lowest), then watched unrated, then unwatched, tie-break alphabetically
+          const sA = a.score !== null ? a.score : (a.isWatched ? -1 : -2);
+          const sB = b.score !== null ? b.score : (b.isWatched ? -1 : -2);
+          if (sB !== sA) return sB - sA;
+          return (a.movie.title || "").localeCompare(b.movie.title || "", "en", { sensitivity: "base" });
+        } else if (sortMode === "score_asc") {
+          // Rated movies lowest to highest first, then unrated at the end, tie-break alphabetically
+          const sA = a.score !== null ? a.score : (a.isWatched ? 998 : 999);
+          const sB = b.score !== null ? b.score : (b.isWatched ? 998 : 999);
+          if (sA !== sB) return sA - sB;
+          return (a.movie.title || "").localeCompare(b.movie.title || "", "en", { sensitivity: "base" });
+        } else if (sortMode === "year_desc") {
+          const yA = parseInt(a.movie.year) || 0;
+          const yB = parseInt(b.movie.year) || 0;
+          if (yB !== yA) return yB - yA;
+          return (a.movie.title || "").localeCompare(b.movie.title || "", "en", { sensitivity: "base" });
+        } else if (sortMode === "year_asc") {
+          const yA = parseInt(a.movie.year) || 9999;
+          const yB = parseInt(b.movie.year) || 9999;
+          if (yA !== yB) return yA - yB;
+          return (a.movie.title || "").localeCompare(b.movie.title || "", "en", { sensitivity: "base" });
+        } else if (sortMode === "title_asc") {
+          return (a.movie.title || "").localeCompare(b.movie.title || "", "en", { sensitivity: "base" });
+        } else if (sortMode === "title_desc") {
+          return (b.movie.title || "").localeCompare(a.movie.title || "", "en", { sensitivity: "base" });
+        } else if (sortMode === "added_desc") {
+          return b.addedIndex - a.addedIndex;
+        }
+        return 0;
+      });
+
+      gridEl.innerHTML = sortedMovies.map(({ movie, isWatched }) => {
+        const bwClasses = isWatched
+          ? ""
+          : "grayscale opacity-65 hover:opacity-90";
+
+        return `
+          <div class="poster-wall-item relative aspect-[2/3] w-full rounded-[4px] overflow-hidden bg-slate-900 border border-slate-700/70 hover:border-cyan-400 cursor-pointer transition-all duration-150 hover:scale-[1.03] shadow-md" data-movie-id="${movie.id}">
+            <img src="${movie.poster}" alt="${movie.title}" loading="lazy" class="w-full h-full object-cover block transition-all duration-200 ${bwClasses}">
+          </div>
+        `;
+      }).join("");
+
+      gridEl.querySelectorAll(".poster-wall-item").forEach(card => {
+        card.addEventListener("click", () => {
+          const mId = card.getAttribute("data-movie-id");
+          const movieObj = state.movies.find(x => x.id === mId);
+          if (movieObj) {
+            selectNode(movieObj);
+          }
+        });
+      });
+    }
+
     // --- 6. EVENT LISTENERS & UI SETUP ---
     document.addEventListener("DOMContentLoaded", () => {
       applyTitleFixes();
@@ -3624,55 +3765,76 @@
       bindCheckbox("filterComposer", "composer");
       bindCheckbox("filterYear", "year");
 
-      // Main View Tabs (Grafo / Top & Rankings / Top Películas / Métricas - Desktop & Mobile synced)
+      // Main View Tabs (Grafo / Top & Rankings / Top Películas / Métricas / Pósters - Desktop & Mobile synced)
       const viewGraphTabBtn = document.getElementById("viewGraphTabBtn");
       const viewStatsTabBtn = document.getElementById("viewStatsTabBtn");
       const viewMoviesRankTabBtn = document.getElementById("viewMoviesRankTabBtn");
       const viewInsightsTabBtn = document.getElementById("viewInsightsTabBtn");
+      const viewPostersTabBtn = document.getElementById("viewPostersTabBtn");
       const mobileViewGraphTabBtn = document.getElementById("mobileViewGraphTabBtn");
       const mobileViewStatsTabBtn = document.getElementById("mobileViewStatsTabBtn");
       const mobileViewMoviesRankTabBtn = document.getElementById("mobileViewMoviesRankTabBtn");
       const mobileViewInsightsTabBtn = document.getElementById("mobileViewInsightsTabBtn");
+      const mobileViewPostersTabBtn = document.getElementById("mobileViewPostersTabBtn");
       const statsViewSection = document.getElementById("statsViewSection");
       const moviesRankViewSection = document.getElementById("moviesRankViewSection");
       const insightsViewSection = document.getElementById("insightsViewSection");
+      const postersViewSection = document.getElementById("postersViewSection");
 
       const activeTabClass = "px-2.5 sm:px-3 py-1.5 rounded-lg text-white font-semibold bg-cyan-600 shadow-sm flex items-center justify-center gap-1.5 transition-all";
       const inactiveTabClass = "px-2.5 sm:px-3 py-1.5 rounded-lg text-slate-300 hover:text-white font-medium flex items-center justify-center gap-1.5 transition-all";
-      const mobileActiveTabClass = "py-1.5 px-1.5 rounded-lg text-white font-semibold bg-cyan-600 shadow-sm flex items-center justify-center gap-1 transition-all";
-      const mobileInactiveTabClass = "py-1.5 px-1.5 rounded-lg text-slate-300 hover:text-white font-medium flex items-center justify-center gap-1 transition-all";
+      const mobileActiveTabClass = "py-1.5 px-1 rounded-lg text-white font-semibold bg-cyan-600 shadow-sm flex items-center justify-center gap-1 transition-all";
+      const mobileInactiveTabClass = "py-1.5 px-1 rounded-lg text-slate-300 hover:text-white font-medium flex items-center justify-center gap-1 transition-all";
 
       const switchMainView = (viewName) => {
         state.activeView = viewName;
         statsViewSection.classList.toggle("hidden", viewName !== "stats");
         moviesRankViewSection.classList.toggle("hidden", viewName !== "moviesRank");
         insightsViewSection.classList.toggle("hidden", viewName !== "insights");
+        if (postersViewSection) postersViewSection.classList.toggle("hidden", viewName !== "posters");
 
         viewGraphTabBtn.className = viewName === "graph" ? activeTabClass : inactiveTabClass;
         viewStatsTabBtn.className = viewName === "stats" ? activeTabClass : inactiveTabClass;
         viewMoviesRankTabBtn.className = viewName === "moviesRank" ? activeTabClass : inactiveTabClass;
         if (viewInsightsTabBtn) viewInsightsTabBtn.className = viewName === "insights" ? activeTabClass : inactiveTabClass;
+        if (viewPostersTabBtn) viewPostersTabBtn.className = viewName === "posters" ? activeTabClass : inactiveTabClass;
 
         if (mobileViewGraphTabBtn) {
           mobileViewGraphTabBtn.className = viewName === "graph" ? mobileActiveTabClass : mobileInactiveTabClass;
           mobileViewStatsTabBtn.className = viewName === "stats" ? mobileActiveTabClass : mobileInactiveTabClass;
           mobileViewMoviesRankTabBtn.className = viewName === "moviesRank" ? mobileActiveTabClass : mobileInactiveTabClass;
           if (mobileViewInsightsTabBtn) mobileViewInsightsTabBtn.className = viewName === "insights" ? mobileActiveTabClass : mobileInactiveTabClass;
+          if (mobileViewPostersTabBtn) mobileViewPostersTabBtn.className = viewName === "posters" ? mobileActiveTabClass : mobileInactiveTabClass;
         }
 
         if (viewName === "stats") renderStatsView();
         if (viewName === "moviesRank") renderMoviesRankView();
         if (viewName === "insights") renderInsightsView();
+        if (viewName === "posters") renderPostersView();
       };
 
       viewGraphTabBtn.addEventListener("click", () => switchMainView("graph"));
       viewStatsTabBtn.addEventListener("click", () => switchMainView("stats"));
       viewMoviesRankTabBtn.addEventListener("click", () => switchMainView("moviesRank"));
       if (viewInsightsTabBtn) viewInsightsTabBtn.addEventListener("click", () => switchMainView("insights"));
+      if (viewPostersTabBtn) viewPostersTabBtn.addEventListener("click", () => switchMainView("posters"));
       if (mobileViewGraphTabBtn) mobileViewGraphTabBtn.addEventListener("click", () => switchMainView("graph"));
       if (mobileViewStatsTabBtn) mobileViewStatsTabBtn.addEventListener("click", () => switchMainView("stats"));
       if (mobileViewMoviesRankTabBtn) mobileViewMoviesRankTabBtn.addEventListener("click", () => switchMainView("moviesRank"));
       if (mobileViewInsightsTabBtn) mobileViewInsightsTabBtn.addEventListener("click", () => switchMainView("insights"));
+      if (mobileViewPostersTabBtn) mobileViewPostersTabBtn.addEventListener("click", () => switchMainView("posters"));
+
+      // Poster Wall Sorting Buttons
+      document.querySelectorAll(".poster-sort-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          state.posterSortBy = btn.getAttribute("data-sort");
+          document.querySelectorAll(".poster-sort-btn").forEach(b => {
+            b.className = "poster-sort-btn px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition";
+          });
+          btn.className = "poster-sort-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-cyan-600 text-white transition";
+          renderPostersView();
+        });
+      });
 
       // Duo Type Selector Pills in 4th Section
       document.querySelectorAll(".duo-tab-btn").forEach(btn => {
